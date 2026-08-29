@@ -10,7 +10,6 @@ from ai_value_lab import (
     calculate_baseline,
 )
 
-
 HELP_TEXT = {
     "monthly_cases": (
         "The number of cases, requests, transactions, or work items handled "
