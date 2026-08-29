@@ -1,0 +1,16 @@
+case_id,category,current_minutes,rework_required
+C001,billing,11,false
+C002,account_access,8,false
+C003,technical,18,true
+C004,billing,9,false
+C005,how_to,7,false
+C006,technical,15,false
+C007,account_access,10,true
+C008,billing,12,false
+C009,how_to,6,false
+C010,technical,20,true
+C011,billing,9,false
+C012,account_access,8,false
+C013,technical,17,false
+C014,how_to,5,false
+C015,billing,10,true
