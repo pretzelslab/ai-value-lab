@@ -1,6 +1,7 @@
 """Core package for AI Value Lab."""
 
 from .models import AIInputs, AssuranceInputs, AssuranceResult, BaselineInputs, Risk
+from .risk_profiles import get_risk_profile
 from .value_model import calculate_ai_scenario, calculate_assurance, calculate_baseline
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "calculate_ai_scenario",
     "calculate_assurance",
     "calculate_baseline",
+    "get_risk_profile",
 ]

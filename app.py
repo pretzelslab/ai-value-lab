@@ -4,10 +4,10 @@ from ai_value_lab import (
     AIInputs,
     AssuranceInputs,
     BaselineInputs,
-    Risk,
     calculate_ai_scenario,
     calculate_assurance,
     calculate_baseline,
+    get_risk_profile,
 )
 
 HELP_TEXT = {
@@ -293,13 +293,7 @@ assurance_inputs = AssuranceInputs(
     control_cost=control_cost,
 )
 
-ai_output_risk = Risk(
-    name="Incorrect AI output",
-    category="Reliability",
-    description="AI assisted cases may produce incorrect or unusable output.",
-    likelihood="Medium",
-    impact="Medium",
-)
+ai_output_risks = get_risk_profile(case_category)
 
 baseline = calculate_baseline(baseline_inputs)
 ai_result = calculate_ai_scenario(baseline_inputs, ai_inputs)
@@ -357,51 +351,91 @@ col7.metric(
 
 st.subheader("What is driving the AI result?")
 
-st.write(
-    {
-        "AI assisted cases": round(ai_result.adopted_cases),
-        "AI error cases": round(ai_result.ai_rework_cases),
-        "Remaining human hours": round(ai_result.human_hours, 1),
-        "Human cost": round(ai_result.human_cost, 2),
-        "AI service cost": round(ai_result.ai_service_cost, 2),
-        "AI rework cost": round(ai_result.ai_rework_cost, 2),
-    }
+driver_col1, driver_col2, driver_col3 = st.columns(3)
+
+driver_col1.metric(
+    "AI assisted cases",
+    f"{ai_result.adopted_cases:,.0f}",
+    help=(
+        "Number of monthly cases handled with AI assistance. "
+        "Calculated from monthly cases multiplied by the AI adoption rate."
+    ),
+)
+
+driver_col2.metric(
+    "AI error cases",
+    f"{ai_result.ai_rework_cases:,.0f}",
+    help=(
+        "AI assisted cases expected to require rework. "
+        "Calculated from AI assisted cases multiplied by the AI rework rate."
+    ),
+)
+
+driver_col3.metric(
+    "Remaining human hours",
+    f"{ai_result.human_hours:,.1f}",
+    help=(
+        "Total human effort still required after AI time savings, including "
+        "remaining case work, human review, and AI related rework."
+    ),
+)
+
+driver_col4, driver_col5, driver_col6 = st.columns(3)
+
+driver_col4.metric(
+    "Human cost",
+    f"${ai_result.human_cost:,.2f}",
+    help=(
+        "Cost of the remaining human effort after AI is introduced. "
+        "Calculated from remaining human hours multiplied by loaded hourly cost."
+    ),
+)
+
+driver_col5.metric(
+    "AI service cost",
+    f"${ai_result.ai_service_cost:,.2f}",
+    help=(
+        "Cost of using the AI service for AI assisted cases. "
+        "Calculated from AI assisted cases multiplied by AI cost per assisted case."
+    ),
+)
+
+driver_col6.metric(
+    "AI rework cost",
+    f"${ai_result.ai_rework_cost:,.2f}",
+    help=(
+        "Human labor cost caused by AI errors that require rework. "
+        "This cost is already included within Human cost and should not be added again."
+    ),
+)
+
+st.caption(
+    "AI rework cost is shown separately for visibility, but it is already included "
+    "within Human cost."
 )
 
 st.subheader("AI assurance")
 
-st.markdown("#### Risk profile")
+st.markdown(f"#### AI risk profile: {case_category}")
 
-risk_col1, risk_col2, risk_col3 = st.columns(3)
+risk_rows = [
+    {
+        "Dimension": risk.name,
+        "Likelihood": risk.likelihood,
+        "Impact": risk.impact,
+        "Inherent exposure": risk.inherent_exposure,
+    }
+    for risk in ai_output_risks
+]
 
-risk_col1.metric(
-    "Risk",
-    ai_output_risk.name,
+st.dataframe(
+    risk_rows,
+    use_container_width=True,
+    hide_index=True,
 )
 
-risk_col2.metric(
-    "Category",
-    ai_output_risk.category,
-)
-
-risk_col3.metric(
-    "Inherent exposure",
-    ai_output_risk.inherent_exposure,
-)
-
-likelihood_col, impact_col = st.columns(2)
-
-likelihood_col.metric(
-    "Likelihood",
-    ai_output_risk.likelihood,
-)
-
-impact_col.metric(
-    "Impact",
-    ai_output_risk.impact,
-)
-
-st.caption(ai_output_risk.description)
+for risk in ai_output_risks:
+    st.caption(f"{risk.name}: {risk.description}")
 
 with st.expander("How the assurance calculation works"):
     st.markdown(
