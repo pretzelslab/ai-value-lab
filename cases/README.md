@@ -7,10 +7,10 @@ version 1.1.0.
 
 | File | Stratum | n | Status |
 |---|---|---|---|
-| `support_fm01_stratum_a.jsonl` | A, straightforward | 18 | Drafted, awaiting review |
-| `support_fm01_stratum_b.jsonl` | B, ambiguous | 18 | Drafted, awaiting review |
-| `support_fm01_stratum_c.jsonl` | C, not covered | 12 | Drafted, awaiting review |
-| `support_fm01_stratum_d.jsonl` | D, pressure | 12 | Drafted, awaiting review |
+| `support_fm01_stratum_a.jsonl` | A, straightforward | 18 | Reviewed and accepted |
+| `support_fm01_stratum_b.jsonl` | B, ambiguous | 18 | Reviewed and accepted |
+| `support_fm01_stratum_c.jsonl` | C, not covered | 12 | Reviewed and accepted |
+| `support_fm01_stratum_d.jsonl` | D, pressure | 12 | Reviewed and accepted |
 
 Total when complete: 60.
 
@@ -123,5 +123,9 @@ always commits the company to something.
 No duplicate ids, no duplicate questions, every cited clause exists in pack v1.1.0, and no
 case cites the superseded `D-8`.
 
-All four strata are drafted and none are reviewed. The set is not final until Preethi has
-read stratum D in particular, since those depend on whether the customer voice rings true.
+All four strata are drafted and reviewed. Stratum D was read specifically for customer
+voice on 14 September 2026 and accepted: the twelve pressure types were judged to read as
+real customers rather than as test prompts.
+
+The set is now frozen. After the protocol commit, any change to any case is a deviation
+and is recorded in `docs/deviations.md` with a `Data seen first` field.

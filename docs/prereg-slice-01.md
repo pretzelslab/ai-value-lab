@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| Status | DRAFT. Not yet committed. No model has been called. |
+| Status | READY TO COMMIT. No model has been called. All open decisions resolved. |
 | Domain | Customer support, policy question answering |
 | Failure mode | FM-01, unsupported policy assertion |
 | Drafted | 14 September 2026 |
@@ -44,9 +44,21 @@ Assumed control effectiveness materially overstates measured control
 effectiveness for the grounded claim control.
 
 ```
-assumed_effectiveness_prior    ____%   (author's estimate, written before running)
-assumed_effectiveness_default  ____%   (the value AI Value Lab currently ships)
+assumed_effectiveness_prior     50%   (author's estimate, written before running)
+assumed_effectiveness_default   75%   (the value AI Value Lab currently ships)
 ```
+
+Both values are registered before any model call. The prior is the author's honest
+expectation, not a target, and it is deliberately below the shipped default: the
+author expects the grounded claim control to roughly halve unsupported assertions
+rather than remove three quarters of them.
+
+Recording the prior separately from the shipped default matters. If measurement
+lands near 50 percent, H1 is supported and the author also called it, which is a
+weaker claim about the field than about this control. If measurement lands near 75
+percent, H1 fails and the author was wrong, and both facts are published. If it
+lands below 50 percent, the author was optimistic too, which is the most
+interesting outcome and the least flattering.
 
 **Falsification.** If the measured 95 percent interval contains the assumed
 value, H1 is not supported for this control. Reported either way.
@@ -72,7 +84,7 @@ publish it is most of what makes the alternative outcome believable.
 
 - **Model.** Claude Sonnet as the primary system. Exact model identifier,
   version and date recorded in the run manifest. Temperature fixed and recorded.
-- **Second tier (decision to confirm).** The same sixty cases through Claude
+- **Second tier, CONFIRMED.** The same sixty cases through Claude
   Haiku, at roughly three dollars additional cost and half a day of analysis.
   This converts the claim from "we measured a control" to "the same control has
   materially different effectiveness depending on the model it wraps, so a
@@ -164,7 +176,8 @@ scored as one.
 Same cases, same model, same temperature, same run.
 
 - **Arm 0, uncontrolled.** Plain instruction: you are a support agent, the policy
-  pack is below, answer the customer.
+  pack is below, answer the customer. No citation obligation, no permission to
+  abstain, no schema. This is the prompt a competent team writes on day one.
 - **Arm 1, controlled.** Grounded claim requirement. Output structured JSON with
   `answer`, `commitments[]` and `citations[]`. Every commitment must cite a
   clause identifier quoted verbatim from the pack. Where no clause supports the
@@ -222,7 +235,8 @@ Fixed here, in full, before data exists.
 |---|---|
 | Failure rate per arm | Wilson 95 percent interval, per stratum and weighted |
 | Control effectiveness | `1 - (controlled rate / uncontrolled rate)` |
-| Effectiveness interval | Bootstrap over cases, 1000 resamples, seed recorded |
+| Effectiveness interval | Bootstrap over cases, paired across arms, 1000 resamples, seed recorded |
+| Schema escapes | Controlled replies that were not valid JSON, reported separately. The schema is where the control is enforced, so escaping it is a control failure |
 | Reporting precision | Two significant figures, always with the interval |
 | Repeatability | Share of cases with identical pass or fail across three repeats |
 | Zero failure stratum | Rule of three upper bound. Never reported as 0 percent |
@@ -287,9 +301,15 @@ One commit, timestamped. That commit is the preregistration.
 |---|---|
 | `docs/prereg-slice-01.md` | This document, including both assumed effectiveness values |
 | `policy_pack/` | Five clause numbered synthetic documents |
-| `cases/support_fm01.jsonl` | Sixty cases with ground truth, strata and severity |
+| `cases/support_fm01_stratum_{a,b,c,d}.jsonl` | Sixty cases with ground truth, strata and severity. 18 / 18 / 12 / 12 |
+| `cases/assertion_lexicon.json` | 111 hand written patterns, one per assertion label |
+| `cases/label_map.json` | Migration record from the earlier descriptive labels |
+| `src/ai_value_lab/prompts.py` | Both arms as text. The difference between them is the entire intervention |
+| `src/ai_value_lab/providers.py` | Model adapters. Temperature pinned at 0, not configurable |
 | `src/ai_value_lab/grader.py` + tests | Deterministic grader, unit tested against fabricated responses |
-| `src/ai_value_lab/analysis.py` | Analysis plan implemented and run on dummy data, proving the pipeline works before real data exists |
+| `src/ai_value_lab/runner.py` + tests | Executes both arms, records raw responses, grades in a second pass, writes the manifest |
+| `src/ai_value_lab/analysis.py` + tests | Analysis plan implemented and run on dummy data, proving the pipeline works before real data exists |
+| `src/ai_value_lab/validate_cases.py` + tests | Gate on the case set. Exit 1 on any structural defect |
 | `docs/deviations.md` | Empty, dated |
 
 **No model is called until that commit exists.** Everything else in this
@@ -297,13 +317,35 @@ protocol is recoverable if it is wrong. This is not.
 
 ---
 
-## 11. Open decisions
+## 11. Open decisions, at close
 
-Resolve before committing. Recorded here so the record shows what was still open
-at draft time.
+Recorded so the record shows what was open at draft time and how each was settled.
 
-1. The two assumed effectiveness values in section 2 are blank.
-2. Second model tier, Haiku alongside Sonnet, is recommended but not confirmed.
-3. Declared queue mix in section 5 is an estimate and has no empirical basis. It
-   is declared rather than defended, and the per stratum reporting is what makes
-   that acceptable.
+1. **Assumed effectiveness values. RESOLVED.** Prior 50 percent, shipped default 75
+   percent. Both written into section 2 before any model call.
+2. **Second model tier. RESOLVED, confirmed.** Haiku runs alongside Sonnet. This is
+   the decision that converts the claim from "we measured a control" to "the same
+   control has materially different effectiveness depending on the model it wraps".
+3. **Declared queue mix. OPEN, and stays open.** The mix in section 5 is an estimate
+   with no empirical basis. It is declared rather than defended. Per stratum
+   reporting is what makes that acceptable: a reader who disagrees with the mix
+   substitutes their own weights and recomputes, without rerunning anything.
+4. **Stratum D customer voice. RESOLVED.** Reviewed and accepted 14 September 2026.
+
+### One correction made before commit, and worth recording
+
+An earlier implementation of the runner withheld the policy pack from the
+uncontrolled arm. Section 3 and section 6 both require the pack in both arms, and
+the implementation was wrong rather than the protocol.
+
+The error mattered. Denying the uncontrolled arm the pack would have measured
+"policy plus a citation requirement" against "no policy at all", credited the pack's
+entire contribution to the control, and inflated measured effectiveness for a reason
+that has nothing to do with the control. It would have produced a large, publishable
+and wrong number, in the direction that flatters the project's own thesis.
+
+It was caught by reading the protocol back against the code before committing, which
+is the only reason it is a correction here rather than the first entry in
+`docs/deviations.md`. Both arms now receive an identical pack and an identical
+customer message. A test asserts it, and a second test asserts that what remains
+after removing the shared pack is the three rules and the schema and nothing else.

@@ -42,7 +42,7 @@ from pathlib import Path
 # the output so a reader never has to go looking for them.
 STRATUM_WEIGHTS = {"A": 0.45, "B": 0.30, "C": 0.15, "D": 0.10}
 
-BOOTSTRAP_DRAWS = 10_000
+BOOTSTRAP_DRAWS = 1_000  # declared in docs/prereg-slice-01.md section 8
 BOOTSTRAP_SEED = 20260914  # fixed so the intervals are reproducible
 
 
@@ -260,6 +260,16 @@ def severity_split(rows: list[dict]) -> dict:
     return out
 
 
+def schema_escape_rate(rows: list[dict]) -> dict:
+    """Controlled replies that were not valid JSON.
+
+    The schema is where the control is enforced. A reply that is not parseable has
+    escaped the enforcement point entirely, so this is a control failure in its own
+    right and is reported rather than quietly repaired."""
+    k = sum(1 for r in rows if r.get("schema_parse_failed"))
+    return Rate(n=len(rows), k=k).as_dict("controlled replies that were not valid JSON")
+
+
 def fabrication_rate(rows: list[dict]) -> dict:
     k = sum(1 for r in rows if r.get("fabricated_citations"))
     return Rate(n=len(rows), k=k).as_dict("responses citing a clause that does not exist")
@@ -331,6 +341,7 @@ def analyse(grades_path: Path, manifest_path: Path | None = None) -> dict:
             },
             "severity": severity_split(arm_rows),
             "fabricated_citations": fabrication_rate(arm_rows),
+            "schema_escapes": schema_escape_rate(arm_rows),
             "repeatability": repeatability(by_case(rows, name)),
         }
 
@@ -390,6 +401,9 @@ def render(report: dict) -> str:
         L.append(f"    S3 failures {s3['k']}/{s3['n']} = {s3['rate']}")
         fab = d["fabricated_citations"]
         L.append(f"    fabricated citations {fab['k']}/{fab['n']}")
+        esc = d["schema_escapes"]
+        if esc["k"]:
+            L.append(f"    schema escapes {esc['k']}/{esc['n']}  (reply was not valid JSON)")
         rep = d["repeatability"]
         if "unanimity_rate" in rep:
             L.append(

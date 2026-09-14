@@ -15,11 +15,13 @@ from pathlib import Path
 import pytest
 
 from ai_value_lab import prompts
+from ai_value_lab.grader import detect_escalation
 from ai_value_lab.providers import EchoProvider, get_provider
 from ai_value_lab.runner import (
     build_messages,
     load_cases,
     load_pack_text,
+    parse_controlled,
     sha256_text,
     summarise,
 )
@@ -82,25 +84,47 @@ def test_cases_load_in_stable_order():
 # ------------------------------------------------------------ the two arms
 
 
-def test_the_uncontrolled_arm_never_sees_the_policy_pack():
-    """This is the whole experiment. If the pack leaks into the uncontrolled arm
-    there is no contrast left to measure."""
+def test_both_arms_receive_the_policy_pack():
+    """The correction that matters most in this file.
+
+    An earlier version of the runner withheld the pack from the uncontrolled arm.
+    That would have measured "policy plus citation requirement" against "nothing",
+    credited the pack's contribution to the control, and inflated effectiveness for
+    a reason that says nothing about the control. Protocol section 3 and section 6
+    both require the pack in both arms."""
     case = load_cases(CASES)[0]
     pack_text = load_pack_text(PACK)
-    system, _ = build_messages(case, "uncontrolled", pack_text)
-    assert "POLICY PACK" not in system
-    assert "R-1." not in system
-    assert len(system) < 500
+    for arm in ("uncontrolled", "controlled"):
+        system, _ = build_messages(case, arm, pack_text)
+        assert pack_text in system, f"{arm} arm is missing the policy pack"
+        assert "POLICY PACK (version 1.1.0)" in system
 
 
-def test_the_controlled_arm_carries_the_pack_and_all_three_rules():
+def test_the_arms_differ_only_by_the_control():
+    """Whatever is left after removing the shared pack is the intervention. It must
+    be the three rules and the schema, and nothing else."""
     case = load_cases(CASES)[0]
     pack_text = load_pack_text(PACK)
-    system, _ = build_messages(case, "controlled", pack_text)
-    assert "POLICY PACK (version 1.1.0)" in system
-    assert "Cite." in system and "Abstain." in system
-    assert "Do not confirm what you cannot see." in system
-    assert pack_text in system
+    unc, _ = build_messages(case, "uncontrolled", pack_text)
+    con, _ = build_messages(case, "controlled", pack_text)
+    unc_only, con_only = unc.replace(pack_text, ""), con.replace(pack_text, "")
+    assert "Cite." not in unc_only
+    assert "Abstain." not in unc_only
+    assert "Reply with JSON only" not in unc_only
+    for rule in ("Cite.", "Abstain.", "Do not confirm what you cannot see.",
+                 "Reply with JSON only"):
+        assert rule in con_only
+
+
+def test_the_controlled_prompt_survives_formatting_with_its_json_braces_intact():
+    """The JSON example in the controlled prompt is full of braces, and the template
+    goes through str.format. Doubling them wrong would ship a broken schema example
+    to the model and only show up as parse failures in the results."""
+    case = load_cases(CASES)[0]
+    system, _ = build_messages(case, "controlled", load_pack_text(PACK))
+    assert '"commitments"' in system
+    assert '"citations": ["R-1"]' in system
+    assert "{{" not in system and "}}" not in system
 
 
 def test_both_arms_get_the_identical_customer_message():
@@ -168,3 +192,77 @@ def test_summarise_splits_by_arm_stratum_and_severity():
     assert s["controlled"]["fabricated_citation_responses"] == 1
     assert s["controlled"]["by_stratum"]["A"] == {"n": 2, "passed": 1}
     assert s["uncontrolled"]["s2_failures"] == 1
+
+
+# ------------------------------------------------------------ structured output
+
+
+def test_valid_json_is_parsed_into_text_and_citations():
+    raw = json.dumps({
+        "answer": "Monthly plans are not refundable.",
+        "commitments": [{"statement": "no refund will be issued", "citations": ["R-1"]}],
+        "escalate": False,
+    })
+    text, cites, failed = parse_controlled(raw)
+    assert not failed
+    assert "Monthly plans are not refundable." in text
+    assert "no refund will be issued" in text
+    assert cites == ("R-1",)
+
+
+def test_code_fences_are_stripped():
+    raw = '```json\n{"answer": "hello", "commitments": [], "escalate": false}\n```'
+    text, _, failed = parse_controlled(raw)
+    assert not failed and text == "hello"
+
+
+def test_a_reply_that_is_not_json_is_recorded_as_a_schema_escape():
+    """Not repaired, not silently tolerated. The schema is where the control is
+    enforced, so escaping it is a result, not a parsing inconvenience."""
+    text, cites, failed = parse_controlled("Sure, I can refund that for you.")
+    assert failed
+    assert cites == ()
+    assert text == "Sure, I can refund that for you."
+
+
+def test_a_json_array_is_a_schema_escape_too():
+    _, _, failed = parse_controlled('["not", "an", "object"]')
+    assert failed
+
+
+def test_the_escalate_flag_reaches_the_escalation_detector():
+    """The schema carries escalation as a boolean. The uncontrolled arm can only say
+    it in words. One detector has to serve both, so the flag is surfaced as text."""
+    raw = json.dumps({"answer": "Let me check.", "commitments": [], "escalate": True})
+    text, _, _ = parse_controlled(raw)
+    assert detect_escalation(text, {})
+
+
+def test_duplicate_citations_are_collapsed_in_order():
+    raw = json.dumps({
+        "answer": "a",
+        "commitments": [
+            {"statement": "x", "citations": ["R-1", "R-5"]},
+            {"statement": "y", "citations": ["R-1"]},
+        ],
+        "escalate": False,
+    })
+    _, cites, _ = parse_controlled(raw)
+    assert cites == ("R-1", "R-5")
+
+
+def test_missing_fields_do_not_crash_the_parser():
+    text, cites, failed = parse_controlled("{}")
+    assert not failed and text == "" and cites == ()
+
+
+def test_echo_provider_answers_in_the_shape_each_arm_asked_for():
+    """So a dry run exercises the JSON path instead of leaving it untested until the
+    first paid call."""
+    case = load_cases(CASES)[0]
+    pack_text = load_pack_text(PACK)
+    p = EchoProvider()
+    unc_sys, u = build_messages(case, "uncontrolled", pack_text)
+    con_sys, _ = build_messages(case, "controlled", pack_text)
+    assert parse_controlled(p.complete(con_sys, u, 1).text)[2] is False
+    assert not p.complete(unc_sys, u, 1).text.startswith("{")

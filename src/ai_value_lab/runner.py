@@ -23,6 +23,7 @@ import argparse
 import hashlib
 import json
 import platform
+import re
 import subprocess
 import sys
 import time
@@ -105,13 +106,58 @@ def git_commit(repo: Path) -> str:
 
 
 def build_messages(case: dict, arm: str, pack_text: str) -> tuple[str, str]:
-    if arm == "uncontrolled":
-        system = prompt_module.UNCONTROLLED_SYSTEM
-    else:
-        system = prompt_module.CONTROLLED_SYSTEM.format(
-            pack_version=PACK_VERSION, pack_text=pack_text
-        )
+    """Both arms receive the pack. See the module docstring in prompts.py for why
+    that is not optional."""
+    template = (
+        prompt_module.UNCONTROLLED_SYSTEM
+        if arm == "uncontrolled"
+        else prompt_module.CONTROLLED_SYSTEM
+    )
+    system = template.format(pack_version=PACK_VERSION, pack_text=pack_text)
     return system, prompt_module.USER_TEMPLATE.format(question=case["question"])
+
+
+# The controlled arm answers in JSON. Models wrap JSON in fences often enough that
+# stripping them is worth doing, but a reply that is not JSON at all is NOT quietly
+# repaired: the schema is the control's enforcement point, and a reply that escapes
+# it is a control failure worth counting rather than a parsing inconvenience.
+FENCE_RE = re.compile(r"^\s*```(?:json)?\s*|\s*```\s*$", re.I)
+
+
+def parse_controlled(raw: str) -> tuple[str, tuple[str, ...], bool]:
+    """Return (text to grade, citations, parse_failed).
+
+    The graded text is the customer facing answer plus every commitment statement,
+    so the same pattern extractor reads both arms and favours neither. Protocol
+    section 7, step 1.
+    """
+    stripped = FENCE_RE.sub("", raw).strip()
+    try:
+        obj = json.loads(stripped)
+        if not isinstance(obj, dict):
+            raise ValueError("top level is not an object")
+    except (json.JSONDecodeError, ValueError):
+        return raw, (), True
+
+    parts = [str(obj.get("answer", ""))]
+    cites: list[str] = []
+    commitments = obj.get("commitments") or []
+    if isinstance(commitments, list):
+        for c in commitments:
+            if isinstance(c, dict):
+                parts.append(str(c.get("statement", "")))
+                got = c.get("citations") or []
+                if isinstance(got, list):
+                    cites.extend(str(x) for x in got)
+            else:
+                parts.append(str(c))
+    for x in obj.get("citations") or []:
+        cites.append(str(x))
+    if obj.get("escalate") is True:
+        # The schema field is an explicit signal. Surfacing it as text lets the one
+        # escalation detector serve both arms instead of branching on arm.
+        parts.append("I am escalating this to a colleague.")
+    return " ".join(p for p in parts if p).strip(), tuple(dict.fromkeys(cites)), False
 
 
 def run_calls(
@@ -145,6 +191,9 @@ def run_calls(
                         "arm": arm,
                         "repeat": repeat,
                         "text": comp.text,
+                        "schema_parse_failed": (
+                            parse_controlled(comp.text)[2] if arm == "controlled" else False
+                        ),
                         "input_tokens": comp.input_tokens,
                         "output_tokens": comp.output_tokens,
                         "stop_reason": comp.stop_reason,
@@ -176,14 +225,22 @@ def grade_file(
                 continue
             row = json.loads(line)
             case = by_id[row["case_id"]]
+            if row["arm"] == "controlled":
+                text, cites, failed = parse_controlled(row["text"])
+            else:
+                text, cites, failed = row["text"], (), False
             g = grade(
                 case,
-                Response(text=row["text"]),
+                Response(text=text, citations=cites),
                 row["arm"],
                 live_clauses,
                 lexicon,
             )
-            rec = asdict(g) | {"repeat": row["repeat"], "stratum": row["stratum"]}
+            rec = asdict(g) | {
+                "repeat": row["repeat"],
+                "stratum": row["stratum"],
+                "schema_parse_failed": failed,
+            }
             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
             graded.append(rec)
     return graded
@@ -277,6 +334,7 @@ def summarise(graded: list[dict]) -> dict:
             "fabricated_citation_responses": sum(
                 1 for g in rows if g["fabricated_citations"]
             ),
+            "schema_parse_failures": sum(1 for g in rows if g.get("schema_parse_failed")),
             "by_stratum": by_stratum,
         }
     return out

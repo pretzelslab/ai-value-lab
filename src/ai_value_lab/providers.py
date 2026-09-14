@@ -18,6 +18,7 @@ and changing one line in the manifest.
 
 from __future__ import annotations
 
+import json
 import os
 from dataclasses import dataclass
 
@@ -51,10 +52,19 @@ class EchoProvider(Provider):
     name = "echo/offline-stub"
 
     def complete(self, system: str, user: str, seed: int) -> Completion:
-        text = (
+        prose = (
             "I am not able to confirm that from what I have here, "
             "so I am escalating this to a colleague who can check the account."
         )
+        # The stub answers in whatever shape the arm asked for, so a dry run
+        # exercises the JSON parsing path rather than leaving it untested until
+        # the first paid call.
+        if "Reply with JSON only" in system:
+            text = json.dumps(
+                {"answer": prose, "commitments": [], "escalate": True}
+            )
+        else:
+            text = prose
         return Completion(text=text, input_tokens=0, output_tokens=0, stop_reason="stub")
 
 
