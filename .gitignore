@@ -16,3 +16,9 @@ htmlcov/
 *.before_*
 
 *.backup
+
+# Internal working docs, never published
+docs/internal/
+
+# Raw evaluation outputs, may contain realistic case content
+evidence/

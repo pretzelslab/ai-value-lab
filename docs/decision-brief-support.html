@@ -1,0 +1,410 @@
+<title>Support Decision Brief</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --background:220 20% 97%; --foreground:220 25% 10%;
+  --card:0 0% 100%; --primary:250 30% 40%; --primary-glow:270 25% 45%;
+  --secondary:220 15% 92%; --muted:220 15% 92%; --muted-foreground:220 10% 50%;
+  --accent:165 25% 36%; --destructive:0 72% 45%; --warn:40 85% 32%;
+  --border:220 15% 88%; --ring:250 65% 55%; --radius:0.75rem;
+  --gradient-primary:linear-gradient(135deg, hsl(250 30% 40%), hsl(270 25% 45%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 30% 40% / 0.12);
+  --shadow-card:0 2px 20px -4px hsl(220 25% 10% / 0.08);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --background:225 25% 8%; --foreground:220 15% 90%;
+  --card:225 20% 12%; --primary:250 40% 55%; --primary-glow:270 35% 60%;
+  --secondary:225 15% 18%; --muted:225 15% 18%; --muted-foreground:220 10% 55%;
+  --accent:165 35% 45%; --destructive:0 62% 52%; --warn:40 75% 60%;
+  --border:225 15% 18%; --ring:250 65% 65%;
+  --gradient-primary:linear-gradient(135deg, hsl(250 65% 65%), hsl(280 70% 70%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 65% 65% / 0.2);
+  --shadow-card:0 2px 20px -4px hsl(0 0% 0% / 0.3);
+}}
+:root[data-theme="dark"]{
+  --background:225 25% 8%; --foreground:220 15% 90%;
+  --card:225 20% 12%; --primary:250 40% 55%; --primary-glow:270 35% 60%;
+  --secondary:225 15% 18%; --muted:225 15% 18%; --muted-foreground:220 10% 55%;
+  --accent:165 35% 45%; --destructive:0 62% 52%; --warn:40 75% 60%;
+  --border:225 15% 18%; --ring:250 65% 65%;
+  --gradient-primary:linear-gradient(135deg, hsl(250 65% 65%), hsl(280 70% 70%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 65% 65% / 0.2);
+  --shadow-card:0 2px 20px -4px hsl(0 0% 0% / 0.3);
+}
+*{box-sizing:border-box}
+body{background:hsl(var(--background));color:hsl(var(--foreground));
+  font-family:'Space Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.6;
+  padding:0 20px;padding-block:0 80px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto}
+h1,h2,h3{font-family:'Syne',system-ui,sans-serif;font-weight:700;letter-spacing:-.02em}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+header.mast{padding-block:56px 30px;display:flex;flex-direction:column;gap:14px;border-bottom:1px solid hsl(var(--border))}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:hsl(var(--accent));font-weight:500}
+h1{font-size:clamp(2.1rem,5vw,3.1rem);line-height:1.05;margin:0;text-wrap:balance}
+h1 .grad{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.standfirst{font-size:1.1rem;line-height:1.6;color:hsl(var(--muted-foreground));max-width:64ch;margin:0;font-weight:300}
+.mastmeta{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 11px;border-radius:999px;background:hsl(var(--secondary));color:hsl(var(--muted-foreground))}
+.pill.warn{background:hsl(var(--warn)/.14);color:hsl(var(--warn))}
+.pill.acc{background:hsl(var(--accent)/.12);color:hsl(var(--accent))}
+
+section{margin-block:50px 0}
+.sechead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.sechead .n{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:hsl(var(--accent));letter-spacing:.1em;font-weight:600}
+h2{font-size:1.65rem;line-height:1.2;margin:0}
+h3{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:hsl(var(--muted-foreground));margin:28px 0 12px;font-family:'Space Grotesk',sans-serif}
+.lede{margin:0 0 20px;color:hsl(var(--muted-foreground));font-size:15px;max-width:70ch;font-weight:300}
+p{max-width:72ch;margin:0 0 15px}
+code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:hsl(var(--secondary));
+  color:hsl(var(--primary));padding:2px 6px;border-radius:5px}
+
+.claim{background:var(--gradient-primary);border-radius:var(--radius);padding:30px 32px;
+  box-shadow:var(--shadow-elegant);margin:8px 0 0}
+.claim .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:hsl(0 0% 100%/.75);display:block;margin-bottom:12px}
+.claim p{font-family:'Syne',sans-serif;font-size:1.5rem;line-height:1.3;color:#fff;margin:0;
+  font-weight:600;letter-spacing:-.02em;max-width:34ch}
+.claim .sub{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:300;
+  color:hsl(0 0% 100%/.85);margin-top:14px;max-width:62ch;letter-spacing:0}
+
+.bp{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:12px}
+.bpc{background:hsl(var(--card));border:1px solid hsl(var(--border));border-radius:var(--radius);
+  padding:20px 21px 22px;box-shadow:var(--shadow-card);border-top:3px solid hsl(var(--primary))}
+.bpc.acc{border-top-color:hsl(var(--accent))}
+.bpc.warn{border-top-color:hsl(var(--warn))}
+.bpc .bk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:hsl(var(--muted-foreground));display:block;margin-bottom:10px}
+.bpc .bv{font-family:'Syne',sans-serif;font-size:2rem;font-weight:700;line-height:1;
+  letter-spacing:-.03em;display:block;color:hsl(var(--primary))}
+.bpc.acc .bv{color:hsl(var(--accent))}
+.bpc.warn .bv{color:hsl(var(--warn))}
+.bpc .bd{font-size:13.5px;color:hsl(var(--muted-foreground));display:block;margin-top:10px;
+  font-weight:300;line-height:1.5}
+
+.scroller{overflow-x:auto;margin:0 0 16px;border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:600px;background:hsl(var(--card));
+  border:1px solid hsl(var(--border));border-radius:var(--radius);overflow:hidden}
+th{text-align:left;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:hsl(var(--muted-foreground));font-weight:600;padding:12px 13px 9px;
+  border-bottom:1px solid hsl(var(--border));background:hsl(var(--secondary)/.5);font-family:'JetBrains Mono',monospace}
+td{padding:11px 13px;border-bottom:1px solid hsl(var(--border));vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.num{text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;font-variant-numeric:tabular-nums}
+td.dim{font-weight:600}
+tr.hi td{background:hsl(var(--accent)/.08)}
+tr.hi td.dim{color:hsl(var(--accent))}
+.good{color:hsl(var(--accent));font-weight:600}
+.bad{color:hsl(var(--destructive));font-weight:600}
+
+figure{margin:22px 0 26px;background:hsl(var(--card));border:1px solid hsl(var(--border));
+  border-radius:var(--radius);box-shadow:var(--shadow-card);padding:24px 24px 16px}
+figure svg{display:block;width:100%;max-width:100%;height:auto}
+figcaption{margin-top:16px;padding-top:14px;border-top:1px solid hsl(var(--border));
+  font-size:13px;color:hsl(var(--muted-foreground));line-height:1.55;font-weight:300}
+
+.ifthen{display:flex;flex-direction:column;gap:0}
+.it{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid hsl(var(--border));
+  border-radius:var(--radius);overflow:hidden;margin-bottom:14px;background:hsl(var(--card));
+  box-shadow:var(--shadow-card)}
+.it .if,.it .then{padding:17px 19px}
+.it .if{background:hsl(var(--secondary)/.5);border-right:1px solid hsl(var(--border))}
+.it .lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:hsl(var(--muted-foreground));display:block;margin-bottom:7px}
+.it .if .lbl{color:hsl(var(--primary))}
+.it .then .lbl{color:hsl(var(--accent))}
+.it p{margin:0;font-size:14.5px;line-height:1.5;max-width:none}
+@media (max-width:660px){.it{grid-template-columns:1fr}.it .if{border-right:none;border-bottom:1px solid hsl(var(--border))}}
+
+.say{background:hsl(var(--card));border-left:3px solid hsl(var(--accent));
+  border-radius:calc(var(--radius) - 2px);padding:18px 20px;margin:0 0 14px;box-shadow:var(--shadow-card)}
+.say .lbl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:hsl(var(--accent));display:block;margin-bottom:8px}
+.say p{margin:0;font-size:16px;line-height:1.55;font-weight:400}
+.say .why{font-size:13px;color:hsl(var(--muted-foreground));margin-top:10px;font-weight:300;display:block}
+
+.call{border-left:3px solid hsl(var(--primary));background:hsl(var(--card));padding:17px 19px;margin:20px 0;
+  border-radius:calc(var(--radius) - 2px);box-shadow:var(--shadow-card)}
+.call.warn{border-left-color:hsl(var(--warn))}
+.call.bad{border-left-color:hsl(var(--destructive))}
+.call .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:hsl(var(--primary));display:block;margin-bottom:7px;font-weight:600}
+.call.warn .lbl{color:hsl(var(--warn))} .call.bad .lbl{color:hsl(var(--destructive))}
+.call p{margin:0;font-size:15px;line-height:1.55}
+.call p + p{margin-top:11px}
+
+ol.method{list-style:none;counter-reset:m;padding:0;margin:0}
+ol.method li{counter-increment:m;display:grid;grid-template-columns:32px 1fr;gap:16px;
+  padding:17px 0;border-bottom:1px solid hsl(var(--border))}
+ol.method li:last-child{border-bottom:none}
+ol.method li::before{content:counter(m,decimal-leading-zero);font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;color:hsl(var(--accent));padding-top:3px;font-weight:600}
+ol.method .t{font-weight:600;display:block;margin-bottom:4px}
+ol.method .d{color:hsl(var(--muted-foreground));font-size:14.5px;display:block;font-weight:300}
+ol.method .q{font-family:'JetBrains Mono',monospace;font-size:12px;color:hsl(var(--primary));
+  background:hsl(var(--secondary)/.6);padding:8px 11px;border-radius:6px;margin-top:9px;display:block}
+
+footer{margin-top:56px;padding-top:22px;border-top:1px solid hsl(var(--border));
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;color:hsl(var(--muted-foreground));
+  display:flex;flex-wrap:wrap;gap:8px 22px}
+a{color:hsl(var(--primary))}
+:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">AI Value Lab &middot; decision brief</div>
+  <h1>Should we put AI in <span class="grad">customer support</span>?</h1>
+  <p class="standfirst">A worked reading of the support scenario: where the money is, where it balances, what each choice commits you to, and what the arithmetic cannot tell you.</p>
+  <div class="mastmeta">
+    <span class="pill warn">All inputs assumed</span>
+    <span class="pill">Defaults from models.py</span>
+    <span class="pill acc">Threshold registered at 75%</span>
+  </div>
+</header>
+
+<section>
+  <div class="sechead"><span class="n">01</span><h2>The claim</h2></div>
+  <p class="lede">One sentence. Everything below either supports it or qualifies it.</p>
+  <div class="claim">
+    <span class="k">If the evidence holds</span>
+    <p>Putting AI into support is worth between $291k and $396k a year, and how much of that you actually get depends on evidence you do not yet have.</p>
+    <span class="sub">The spread is not uncertainty about the AI. It is uncertainty about how much human checking you can safely stop doing, and that is a question only measurement answers.</span>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">02</span><h2>What is known, and what is not</h2></div>
+  <p class="lede">Put this first, always. A reader who discovers halfway through that the inputs were invented stops trusting the whole document.</p>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>Quantity</th><th class="num">Value</th><th>Basis</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">Tickets per month</td><td class="num">10,000</td><td>Assumed. Replace with your helpdesk volume report</td></tr>
+        <tr><td class="dim">Handling time per ticket</td><td class="num">10 min</td><td>Assumed. Median, excluding wait time</td></tr>
+        <tr><td class="dim">Loaded hourly cost</td><td class="num">$45</td><td>Assumed. Salary plus employer costs and overhead</td></tr>
+        <tr><td class="dim">Share AI assists</td><td class="num">70%</td><td>Assumed. Becomes the automation line once measured</td></tr>
+        <tr><td class="dim">Current human review rate</td><td class="num">70%</td><td>Assumed. This is the lever</td></tr>
+        <tr><td class="dim">AI answers that are wrong</td><td class="num">6%</td><td><span class="bad">Assumed.</span> This is what the experiment measures</td></tr>
+        <tr><td class="dim">Control effectiveness</td><td class="num">75%</td><td><span class="bad">Assumed.</span> Shipped default, never measured</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="call warn">
+    <span class="lbl">Say this out loud before any number</span>
+    <p>Every figure in this brief is computed correctly from inputs that are themselves estimates. The arithmetic is not in question. The inputs are. Two of them, the error rate and the control effectiveness, are the entire point of the experiment.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">03</span><h2>Where things balance</h2></div>
+  <p class="lede">Three balance points. Each is a number the model computes rather than a judgement you make, and each answers a different question a reviewer will ask.</p>
+  <div class="bp">
+    <div class="bpc acc">
+      <span class="bk">Quality neutral point</span>
+      <span class="bv">57%</span>
+      <span class="bd">The control effectiveness at which you can cut review from 70 percent to 30 percent and customers see exactly as many bad answers as they do today. Below this you are buying savings with customer harm. Above it you are getting both.</span>
+    </div>
+    <div class="bpc">
+      <span class="bk">Economic break even</span>
+      <span class="bv">301%</span>
+      <span class="bd">The review rate at which savings reach zero. It is above 100 percent, which means review cost alone can never sink this case. You would have to review every answer three times over. The binding constraint here is quality, not money.</span>
+    </div>
+    <div class="bpc warn">
+      <span class="bk">Your registered threshold</span>
+      <span class="bv">75%</span>
+      <span class="bd">What you committed to in advance: the control must measure at least this before you would reduce review. It sits 18 points above the quality neutral point, so it is a conservative bar rather than a permissive one.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">04</span><h2>The line you can defend</h2></div>
+  <p class="lede">For every review rate there is a minimum control effectiveness that keeps quality at today's level. That relationship is the automation line, and it is one equation.</p>
+
+  <figure>
+    <svg viewBox="0 0 660 350" role="img" aria-label="Line chart. The control effectiveness needed to hold quality at today's level rises as the human review rate falls, from zero percent effectiveness at seventy percent review to seventy percent effectiveness at zero review. The registered threshold of seventy five percent sits above the entire curve.">
+      <defs>
+        <linearGradient id="okfill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="hsl(var(--accent))" stop-opacity="0.16"></stop>
+          <stop offset="100%" stop-color="hsl(var(--accent))" stop-opacity="0.03"></stop>
+        </linearGradient>
+      </defs>
+
+      <!-- gridlines -->
+      <g stroke="hsl(var(--border))" stroke-width="1">
+        <line x1="56" y1="296" x2="620" y2="296"></line>
+        <line x1="56" y1="227" x2="620" y2="227"></line>
+        <line x1="56" y1="158" x2="620" y2="158"></line>
+        <line x1="56" y1="89"  x2="620" y2="89"></line>
+        <line x1="56" y1="20"  x2="620" y2="20"></line>
+      </g>
+      <g font-family="JetBrains Mono, monospace" font-size="10" fill="hsl(var(--muted-foreground))" text-anchor="end">
+        <text x="48" y="300">0%</text><text x="48" y="231">25%</text>
+        <text x="48" y="162">50%</text><text x="48" y="93">75%</text><text x="48" y="24">100%</text>
+      </g>
+
+      <!-- acceptable region above curve -->
+      <path d="M 56 102.8 L 136.6 111.9 L 217.1 123.5 L 297.7 138.4 L 378.3 158 L 458.9 185.6 L 539.4 227 L 620 296 L 620 20 L 56 20 Z"
+            fill="url(#okfill)"></path>
+
+      <!-- the curve -->
+      <polyline points="56,102.8 136.6,111.9 217.1,123.5 297.7,138.4 378.3,158 458.9,185.6 539.4,227 620,296"
+                fill="none" stroke="hsl(var(--primary))" stroke-width="2.5" stroke-linejoin="round"></polyline>
+
+      <!-- threshold line -->
+      <line x1="56" y1="89" x2="620" y2="89" stroke="hsl(var(--accent))" stroke-width="2" stroke-dasharray="6 4"></line>
+      <text x="636" y="82" font-family="JetBrains Mono, monospace" font-size="10.5" fill="hsl(var(--accent))" text-anchor="end">your threshold, 75%</text>
+
+      <!-- marked points -->
+      <circle cx="297.7" cy="138.4" r="5" fill="hsl(var(--primary))" stroke="hsl(var(--card))" stroke-width="2"></circle>
+      <text x="305" y="134" font-family="JetBrains Mono, monospace" font-size="10.5" fill="hsl(var(--foreground))">30% review needs 57%</text>
+      <circle cx="56" cy="102.8" r="5" fill="hsl(var(--primary))" stroke="hsl(var(--card))" stroke-width="2"></circle>
+      <text x="66" y="122" font-family="JetBrains Mono, monospace" font-size="10.5" fill="hsl(var(--foreground))">no review needs 70%</text>
+
+      <!-- axes labels -->
+      <g font-family="JetBrains Mono, monospace" font-size="10" fill="hsl(var(--muted-foreground))" text-anchor="middle">
+        <text x="56" y="315">0%</text><text x="217" y="315">20%</text>
+        <text x="378" y="315">40%</text><text x="539" y="315">60%</text><text x="620" y="315">70%</text>
+      </g>
+      <text x="348" y="338" font-family="Space Grotesk, sans-serif" font-size="12" fill="hsl(var(--muted-foreground))" text-anchor="middle">Human review rate, falling to the left</text>
+      <text x="16" y="158" font-family="Space Grotesk, sans-serif" font-size="12" fill="hsl(var(--muted-foreground))" text-anchor="middle" transform="rotate(-90 16 158)">Control effectiveness needed</text>
+    </svg>
+    <figcaption>The shaded region is where measured effectiveness is high enough to justify that review rate without customers seeing more bad answers than today. Your registered threshold of 75 percent sits above the entire curve, which means it clears every review rate including removing review altogether. That is worth pausing on, and section 07 explains why you should not take the arithmetic at its word.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">05</span><h2>If this, then that</h2></div>
+  <p class="lede">What each possible measurement commits you to. Written now, before the result, so the result cannot be reinterpreted to suit.</p>
+
+  <div class="ifthen">
+    <div class="it">
+      <div class="if"><span class="lbl">If measured effectiveness is</span><p><strong>Below 40 percent</strong>, with the interval's lower bound below 40</p></div>
+      <div class="then"><span class="lbl">Then</span><p>Hold review at 70 percent. Take the $291k. The control is not doing enough work to justify looking at less, and pretending otherwise is how the harm arrives quietly.</p></div>
+    </div>
+    <div class="it">
+      <div class="if"><span class="lbl">If measured effectiveness is</span><p><strong>40 to 57 percent</strong></p></div>
+      <div class="then"><span class="lbl">Then</span><p>Reduce review to 50 percent, not 30. Worth roughly $325k a year, and it holds quality at today's level. The remaining gap is an argument for a second control, not for more optimism.</p></div>
+    </div>
+    <div class="it">
+      <div class="if"><span class="lbl">If measured effectiveness is</span><p><strong>57 to 75 percent</strong></p></div>
+      <div class="then"><span class="lbl">Then</span><p>Quality neutral at 30 percent review, worth roughly $354k. But it is below the threshold you registered, so by your own rule you pilot rather than roll out. Registering the bar only counts if you honour it when it is inconvenient.</p></div>
+    </div>
+    <div class="it">
+      <div class="if"><span class="lbl">If measured effectiveness is</span><p><strong>Above 75 percent</strong>, lower bound above 75</p></div>
+      <div class="then"><span class="lbl">Then</span><p>Your threshold is cleared. Review at 30 percent is worth $358k a year with quality improving rather than holding. Recommend proceed with the control mandatory and the review rate reviewed quarterly.</p></div>
+    </div>
+    <div class="it">
+      <div class="if"><span class="lbl">If any severity 3 failure appears</span><p>Even one, at any effectiveness</p></div>
+      <div class="then"><span class="lbl">Then</span><p>The economics stop mattering. A commitment of money or a data action the policy does not permit is a hard veto. Fix the failure mode, then remeasure. This rule was registered in advance precisely so it cannot be argued away later.</p></div>
+    </div>
+    <div class="it">
+      <div class="if"><span class="lbl">If the interval is very wide</span><p>For example 45 to 85 percent</p></div>
+      <div class="then"><span class="lbl">Then</span><p>You have not measured anything decisive. Sixty cases were not enough for this effect size. Report the width honestly, pilot at 50 percent review, and expand the case set before claiming a number.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">06</span><h2>What to actually say</h2></div>
+  <p class="lede">The sentences. Each is defensible, each carries its own caveat, and none of them overstates.</p>
+
+  <div class="say">
+    <span class="lbl">Opening</span>
+    <p>"AI in support is worth somewhere between $291,000 and $396,000 a year. The reason it is a range and not a number is that the size depends on how much human checking we can safely stop doing, and nobody has measured that yet."</p>
+    <span class="why">Leads with money, immediately explains the uncertainty as a knowable thing rather than a hedge.</span>
+  </div>
+
+  <div class="say">
+    <span class="lbl">When asked why we cannot just decide now</span>
+    <p>"Today 126 wrong answers a month reach customers. If we cut review from 70 percent to 30 percent without a working control, that becomes 294. The saving is $50,400 a year. I am not willing to recommend more than doubling customer-facing errors for $50,000 without knowing whether the control catches them."</p>
+    <span class="why">Converts an abstract risk into a countable one. The specific number is what makes it land.</span>
+  </div>
+
+  <div class="say">
+    <span class="lbl">On the threshold</span>
+    <p>"We wrote down in advance that the control has to measure at least 75 percent before we reduce review. The arithmetic says 57 percent would be enough to hold quality steady. We set the bar higher deliberately, because a control we have measured once should be held to more than break even."</p>
+    <span class="why">Shows the bar was set before the data and is more conservative than required. Both of those are credibility.</span>
+  </div>
+
+  <div class="say">
+    <span class="lbl">On cost, when finance asks</span>
+    <p>"Review cost alone cannot sink this. Savings stay positive until the review rate passes 301 percent, which is impossible. The constraint on this decision is quality, not money, and that is the honest way to frame it."</p>
+    <span class="why">Pre-empts the question and moves the conversation to the real constraint.</span>
+  </div>
+
+  <div class="say">
+    <span class="lbl">On what could go wrong with the analysis</span>
+    <p>"The 6 percent error rate underneath all of this is an assumption, not a measurement. If it is really 12 percent, every number here moves against us. That is the first thing the experiment tests."</p>
+    <span class="why">Naming your own weakest assumption before someone else finds it is the cheapest credibility available.</span>
+  </div>
+
+  <div class="say">
+    <span class="lbl">Closing</span>
+    <p>"The ask is two weeks and about twenty five dollars of API spend, to replace the two assumptions this decision rests on with measurements. Then we make the call with evidence instead of estimates."</p>
+    <span class="why">Small, concrete, and makes the alternative sound like what it is: deciding on guesses.</span>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">07</span><h2>Where the arithmetic runs out</h2></div>
+  <p class="lede">The most important section, and the one most models leave out.</p>
+
+  <div class="call bad">
+    <span class="lbl">A result you should refuse</span>
+    <p>At 75 percent effectiveness, the model says you could remove human review entirely and still have fewer bad answers reaching customers than today. 105 a month against 126, worth $396k a year.</p>
+    <p>No support leader would accept that, and they would be right. When a model recommends something nobody would do, the model is missing a constraint rather than revealing an insight.</p>
+  </div>
+
+  <h3>What the model does not know</h3>
+  <p><strong>All errors count the same.</strong> The model counts 105 errors against 126 and calls it an improvement. It has no idea that one wrong refund commitment can cost more than fifty wrong SLA phrasings. Severity classes exist in the protocol precisely because the economics cannot see them.</p>
+  <p><strong>Review does more than catch errors.</strong> It trains agents, surfaces policy gaps, and builds the institutional confidence that lets anyone defend the system when it fails. Removing it entirely removes all of that, none of which appears in a minutes calculation.</p>
+  <p><strong>Trust is not linear.</strong> A hundred small errors spread over a year is survivable. The same hundred in one week is a crisis. The model has no concept of clustering.</p>
+  <p><strong>Some review is not optional.</strong> Contractual commitments, regulatory expectations and enterprise customer agreements can require human oversight regardless of what a measured failure rate says.</p>
+  <p><strong>The measurement expires.</strong> Effectiveness is measured against one model version on one date. A vendor version bump silently voids it, and nothing in the arithmetic notices.</p>
+
+  <div class="call">
+    <span class="lbl">How to use this</span>
+    <p>Treat the arithmetic as a floor, not an answer. It tells you what is economically possible and where quality balances. The decision layer then applies constraints the arithmetic cannot see: severity vetoes, contractual minimums, and a sensible floor on review that no measurement is allowed to argue away.</p>
+    <p>A recommendation of "30 percent review, never below 20, with a mandatory control and quarterly remeasurement" is defensible. "Zero review, the model said so" is not, however good the arithmetic.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">08</span><h2>How to read any scenario</h2></div>
+  <p class="lede">The transferable method. Six questions, in order, for any use case you assess.</p>
+  <ol class="method">
+    <li><div><span class="t">What is the range, and what is the range about?</span>
+      <span class="d">Never a single number. Then name the one input the spread depends on, because that input is what you go and measure.</span>
+      <span class="q">$291k to $396k, and the spread is entirely review burden</span></div></li>
+    <li><div><span class="t">Which inputs are measured and which are assumed?</span>
+      <span class="d">State this before any figure. Mark the two or three assumptions that carry the result, and be the first to point at your weakest one.</span>
+      <span class="q">error rate and control effectiveness, both assumed, both load bearing</span></div></li>
+    <li><div><span class="t">Where does it break even economically?</span>
+      <span class="d">The point at which savings vanish. If that point is implausible, say so, because it tells everyone the real constraint lies elsewhere.</span>
+      <span class="q">301 percent review, which is impossible, so cost is not the constraint</span></div></li>
+    <li><div><span class="t">Where does it break even on quality?</span>
+      <span class="d">The point at which customers are no worse off. This is usually the number that should drive the decision and it is usually the one nobody computed.</span>
+      <span class="q">57 percent control effectiveness at 30 percent review</span></div></li>
+    <li><div><span class="t">What did you commit to in advance?</span>
+      <span class="d">The threshold, the hard vetoes, and the analysis plan. Written before the data. This is what separates a decision from a rationalisation.</span>
+      <span class="q">75 percent, plus any severity 3 failure is a veto</span></div></li>
+    <li><div><span class="t">What can the arithmetic not see?</span>
+      <span class="d">Severity, clustering, contractual floors, second order effects, expiry. Name them explicitly, then apply them as constraints on top of the numbers rather than hoping the numbers absorbed them.</span>
+      <span class="q">never below 20 percent review regardless of what the model says</span></div></li>
+  </ol>
+</section>
+
+<footer>
+  <span>AI Value Lab &middot; support decision brief</span>
+  <span>Inputs from models.py, all assumed</span>
+  <span>Threshold 75% registered before measurement</span>
+</footer>
+
+</div>

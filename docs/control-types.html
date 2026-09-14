@@ -1,0 +1,391 @@
+<title>Control Types for Support AI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --background:220 20% 97%; --foreground:220 25% 10%;
+  --card:0 0% 100%; --primary:250 30% 40%; --primary-glow:270 25% 45%;
+  --secondary:220 15% 92%; --muted-foreground:220 10% 50%;
+  --accent:165 25% 36%; --destructive:0 72% 45%; --warn:40 85% 32%;
+  --border:220 15% 88%; --ring:250 65% 55%; --radius:0.75rem;
+  --gradient-primary:linear-gradient(135deg, hsl(250 30% 40%), hsl(270 25% 45%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 30% 40% / 0.12);
+  --shadow-card:0 2px 20px -4px hsl(220 25% 10% / 0.08);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --background:225 25% 8%; --foreground:220 15% 90%;
+  --card:225 20% 12%; --primary:250 40% 55%; --primary-glow:270 35% 60%;
+  --secondary:225 15% 18%; --muted-foreground:220 10% 55%;
+  --accent:165 35% 45%; --destructive:0 62% 52%; --warn:40 75% 60%;
+  --border:225 15% 18%; --ring:250 65% 65%;
+  --gradient-primary:linear-gradient(135deg, hsl(250 65% 65%), hsl(280 70% 70%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 65% 65% / 0.2);
+  --shadow-card:0 2px 20px -4px hsl(0 0% 0% / 0.3);
+}}
+:root[data-theme="dark"]{
+  --background:225 25% 8%; --foreground:220 15% 90%;
+  --card:225 20% 12%; --primary:250 40% 55%; --primary-glow:270 35% 60%;
+  --secondary:225 15% 18%; --muted-foreground:220 10% 55%;
+  --accent:165 35% 45%; --destructive:0 62% 52%; --warn:40 75% 60%;
+  --border:225 15% 18%; --ring:250 65% 65%;
+  --gradient-primary:linear-gradient(135deg, hsl(250 65% 65%), hsl(280 70% 70%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 65% 65% / 0.2);
+  --shadow-card:0 2px 20px -4px hsl(0 0% 0% / 0.3);
+}
+*{box-sizing:border-box}
+body{background:hsl(var(--background));color:hsl(var(--foreground));
+  font-family:'Space Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.6;
+  padding:0 20px;padding-block:0 80px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto}
+h1,h2,h3{font-family:'Syne',system-ui,sans-serif;font-weight:700;letter-spacing:-.02em}
+
+header.mast{padding-block:56px 28px;display:flex;flex-direction:column;gap:13px;border-bottom:1px solid hsl(var(--border))}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:hsl(var(--accent));font-weight:500}
+h1{font-size:clamp(2rem,4.8vw,3rem);line-height:1.06;margin:0;text-wrap:balance}
+h1 .grad{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.standfirst{font-size:1.1rem;line-height:1.6;color:hsl(var(--muted-foreground));max-width:62ch;margin:0;font-weight:300}
+
+section{margin-block:48px 0}
+.sechead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.sechead .n{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:hsl(var(--accent));letter-spacing:.1em;font-weight:600}
+h2{font-size:1.6rem;line-height:1.2;margin:0}
+h3{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:hsl(var(--muted-foreground));margin:26px 0 12px;font-family:'Space Grotesk',sans-serif}
+.lede{margin:0 0 20px;color:hsl(var(--muted-foreground));font-size:15px;max-width:70ch;font-weight:300}
+p{max-width:72ch;margin:0 0 15px}
+code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:hsl(var(--secondary));
+  color:hsl(var(--primary));padding:2px 6px;border-radius:5px}
+
+figure{margin:20px 0 26px;background:hsl(var(--card));border:1px solid hsl(var(--border));
+  border-radius:var(--radius);box-shadow:var(--shadow-card);padding:24px 22px 16px}
+figure svg{display:block;width:100%;max-width:100%;height:auto}
+figcaption{margin-top:16px;padding-top:14px;border-top:1px solid hsl(var(--border));
+  font-size:13px;color:hsl(var(--muted-foreground));line-height:1.55;font-weight:300}
+
+.ctrl{background:hsl(var(--card));border:1px solid hsl(var(--border));border-radius:var(--radius);
+  box-shadow:var(--shadow-card);margin-bottom:18px;overflow:hidden}
+.ctrl.ours{border-color:hsl(var(--accent)/.5);box-shadow:var(--shadow-elegant)}
+.ctrl .hd{padding:18px 22px 14px;border-bottom:1px solid hsl(var(--border));
+  display:flex;align-items:baseline;gap:13px;flex-wrap:wrap}
+.ctrl.ours .hd{background:hsl(var(--accent)/.07)}
+.ctrl .num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:hsl(var(--accent));font-weight:600}
+.ctrl .nm{font-family:'Syne',sans-serif;font-size:1.18rem;font-weight:700;letter-spacing:-.02em}
+.ctrl .tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.07em;
+  text-transform:uppercase;padding:3px 8px;border-radius:999px;background:hsl(var(--secondary));
+  color:hsl(var(--muted-foreground));margin-left:auto}
+.ctrl .tag.pick{background:hsl(var(--accent)/.15);color:hsl(var(--accent))}
+.ctrl .bd{padding:18px 22px 20px}
+.ctrl .bd p{margin:0 0 13px;font-size:15px}
+.ctrl .bd p:last-child{margin-bottom:0}
+.eg{background:hsl(var(--secondary)/.55);border-radius:8px;padding:14px 16px;margin:0 0 14px}
+.eg .l{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:hsl(var(--primary));display:block;margin-bottom:7px;font-weight:600}
+.eg p{margin:0;font-size:14.5px;line-height:1.5}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:15px;
+  padding-top:15px;border-top:1px solid hsl(var(--border))}
+.meta div{font-size:12.5px}
+.meta .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:hsl(var(--muted-foreground));display:block;margin-bottom:4px}
+.meta .v{font-weight:500}
+.v.hi{color:hsl(var(--accent))} .v.lo{color:hsl(var(--destructive))} .v.md{color:hsl(var(--warn))}
+
+.call{border-left:3px solid hsl(var(--primary));background:hsl(var(--card));padding:17px 19px;margin:20px 0;
+  border-radius:calc(var(--radius) - 2px);box-shadow:var(--shadow-card)}
+.call.warn{border-left-color:hsl(var(--warn))}
+.call.acc{border-left-color:hsl(var(--accent))}
+.call .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:hsl(var(--primary));display:block;margin-bottom:7px;font-weight:600}
+.call.warn .lbl{color:hsl(var(--warn))} .call.acc .lbl{color:hsl(var(--accent))}
+.call p{margin:0;font-size:15px;line-height:1.55}
+.call p + p{margin-top:11px}
+
+.math{background:hsl(var(--card));border:1px solid hsl(var(--border));border-radius:var(--radius);
+  padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.85;
+  color:hsl(var(--muted-foreground));overflow-x:auto;margin:0 0 16px;box-shadow:var(--shadow-card)}
+.math b{color:hsl(var(--foreground));font-weight:500}
+.math .g{color:hsl(var(--accent));font-weight:500}
+.math .r{color:hsl(var(--destructive));font-weight:500}
+
+.scroller{overflow-x:auto;margin:0 0 16px;border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:620px;background:hsl(var(--card));
+  border:1px solid hsl(var(--border));border-radius:var(--radius);overflow:hidden}
+th{text-align:left;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:hsl(var(--muted-foreground));
+  font-weight:600;padding:12px 13px 9px;border-bottom:1px solid hsl(var(--border));
+  background:hsl(var(--secondary)/.5);font-family:'JetBrains Mono',monospace}
+td{padding:10px 13px;border-bottom:1px solid hsl(var(--border));vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.dim{font-weight:600}
+tr.pick td{background:hsl(var(--accent)/.07)}
+tr.pick td.dim{color:hsl(var(--accent))}
+
+footer{margin-top:52px;padding-top:22px;border-top:1px solid hsl(var(--border));
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;color:hsl(var(--muted-foreground));
+  display:flex;flex-wrap:wrap;gap:8px 22px}
+:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">AI Value Lab &middot; reference</div>
+  <h1>What counts as a <span class="grad">control</span>?</h1>
+  <p class="standfirst">Seven types, where each one sits in the pipeline, a concrete support example for every one, and why we chose the one we are measuring first.</p>
+</header>
+
+<section>
+  <div class="sechead"><span class="n">01</span><h2>Where controls sit</h2></div>
+  <p class="lede">The single most useful thing to know about any control is which side of the send line it sits on. That decides whether it prevents harm or merely shortens it.</p>
+
+  <figure>
+    <svg viewBox="0 0 880 250" role="img" aria-label="Pipeline diagram. A customer question passes through a scope control, then the model with grounding and constraint controls attached, then an automated check and human review, then it is sent to the customer. Monitoring and correction controls sit after the send line. Controls before the send line prevent harm; controls after it only shorten harm.">
+      <defs>
+        <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor"></path>
+        </marker>
+      </defs>
+
+      <!-- send divider -->
+      <rect x="470" y="34" width="2" height="182" fill="hsl(var(--destructive))" opacity="0.55"></rect>
+      <text x="471" y="26" font-family="JetBrains Mono, monospace" font-size="10" fill="hsl(var(--destructive))" text-anchor="middle">SENT</text>
+      <text x="300" y="234" font-family="Space Grotesk, sans-serif" font-size="11.5" fill="hsl(var(--accent))" text-anchor="middle">these prevent the harm</text>
+      <text x="660" y="234" font-family="Space Grotesk, sans-serif" font-size="11.5" fill="hsl(var(--destructive))" text-anchor="middle">these only shorten it</text>
+
+      <!-- question -->
+      <rect x="10" y="106" width="74" height="42" rx="7" fill="hsl(var(--secondary))" stroke="hsl(var(--border))"></rect>
+      <text x="47" y="123" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">Customer</text>
+      <text x="47" y="137" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">question</text>
+      <path d="M 86 127 L 100 127" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"></path>
+
+      <!-- 1 scope -->
+      <rect x="102" y="106" width="66" height="42" rx="7" fill="hsl(var(--card))" stroke="hsl(var(--accent))" stroke-width="1.5"></rect>
+      <text x="135" y="122" font-family="JetBrains Mono, monospace" font-size="9.5" fill="hsl(var(--accent))" text-anchor="middle">01</text>
+      <text x="135" y="137" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">Scope</text>
+      <path d="M 170 127 L 184 127" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"></path>
+
+      <!-- model with 2 and 3 -->
+      <rect x="186" y="80" width="106" height="94" rx="8" fill="hsl(var(--secondary))" stroke="hsl(var(--border))"></rect>
+      <text x="239" y="98" font-family="Space Grotesk, sans-serif" font-size="11.5" fill="currentColor" text-anchor="middle" font-weight="600">Model</text>
+      <rect x="194" y="106" width="90" height="26" rx="5" fill="hsl(var(--card))" stroke="hsl(var(--accent))" stroke-width="1.3"></rect>
+      <text x="239" y="123" font-family="Space Grotesk, sans-serif" font-size="10" fill="currentColor" text-anchor="middle">02 Grounding</text>
+      <rect x="194" y="138" width="90" height="26" rx="5" fill="hsl(var(--card))" stroke="hsl(var(--accent))" stroke-width="1.3"></rect>
+      <text x="239" y="155" font-family="Space Grotesk, sans-serif" font-size="10" fill="currentColor" text-anchor="middle">03 Constraint</text>
+      <path d="M 294 127 L 308 127" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"></path>
+
+      <!-- 4 auto -->
+      <rect x="310" y="106" width="70" height="42" rx="7" fill="hsl(var(--card))" stroke="hsl(var(--accent))" stroke-width="1.5"></rect>
+      <text x="345" y="122" font-family="JetBrains Mono, monospace" font-size="9.5" fill="hsl(var(--accent))" text-anchor="middle">04</text>
+      <text x="345" y="137" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">Auto check</text>
+      <path d="M 382 127 L 394 127" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"></path>
+
+      <!-- 5 human -->
+      <rect x="396" y="106" width="66" height="42" rx="7" fill="hsl(var(--card))" stroke="hsl(var(--accent))" stroke-width="1.5"></rect>
+      <text x="429" y="122" font-family="JetBrains Mono, monospace" font-size="9.5" fill="hsl(var(--accent))" text-anchor="middle">05</text>
+      <text x="429" y="137" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">Review</text>
+
+      <path d="M 476 127 L 496 127" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"></path>
+
+      <!-- customer -->
+      <rect x="498" y="106" width="76" height="42" rx="7" fill="hsl(var(--secondary))" stroke="hsl(var(--border))"></rect>
+      <text x="536" y="131" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">Customer</text>
+      <path d="M 576 127 L 590 127" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"></path>
+
+      <!-- 6 monitor -->
+      <rect x="592" y="106" width="70" height="42" rx="7" fill="hsl(var(--card))" stroke="hsl(var(--destructive))" stroke-width="1.5" stroke-dasharray="4 3"></rect>
+      <text x="627" y="122" font-family="JetBrains Mono, monospace" font-size="9.5" fill="hsl(var(--destructive))" text-anchor="middle">06</text>
+      <text x="627" y="137" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">Monitor</text>
+      <path d="M 664 127 L 678 127" stroke="currentColor" stroke-width="1.2" marker-end="url(#a)"></path>
+
+      <!-- 7 correct -->
+      <rect x="680" y="106" width="70" height="42" rx="7" fill="hsl(var(--card))" stroke="hsl(var(--destructive))" stroke-width="1.5" stroke-dasharray="4 3"></rect>
+      <text x="715" y="122" font-family="JetBrains Mono, monospace" font-size="9.5" fill="hsl(var(--destructive))" text-anchor="middle">07</text>
+      <text x="715" y="137" font-family="Space Grotesk, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">Correct</text>
+
+      <text x="800" y="122" font-family="Space Grotesk, sans-serif" font-size="11" fill="hsl(var(--muted-foreground))">harm has</text>
+      <text x="800" y="137" font-family="Space Grotesk, sans-serif" font-size="11" fill="hsl(var(--muted-foreground))">already landed</text>
+    </svg>
+    <figcaption>Controls 01 to 05 stop a wrong answer before a customer reads it. Controls 06 and 07 run after the commitment has been made, so they reduce how long the harm lasts and how bad it gets, never whether it happened. Both matter. Only the first group belongs in an effectiveness measurement against a failure rate.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">02</span><h2>The seven types</h2></div>
+  <p class="lede">Each with a support example specific enough to implement.</p>
+
+  <div class="ctrl">
+    <div class="hd"><span class="num">01</span><span class="nm">Scope control</span><span class="tag">Preventive</span></div>
+    <div class="bd">
+      <p>Decide what the AI is allowed to attempt at all. The cheapest control there is, and the one most often skipped because it feels like giving up ground.</p>
+      <div class="eg"><span class="l">Support example</span>
+        <p>Route only refund, SLA, entitlement and billing questions to the AI. Anything mentioning contract termination, a regulator, a legal threat, an accessibility complaint or a named executive goes straight to a human queue and the AI never sees it.</p></div>
+      <div class="meta">
+        <div><span class="k">Cost</span><span class="v hi">Very low, one routing rule</span></div>
+        <div><span class="k">Measurable</span><span class="v hi">Yes, deterministically</span></div>
+        <div><span class="k">Weakness</span><span class="v">Only covers categories you thought of</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <div class="hd"><span class="num">02</span><span class="nm">Grounding control</span><span class="tag">Preventive</span></div>
+    <div class="bd">
+      <p>Restrict what the model can draw on. Errors it cannot source cannot be asserted.</p>
+      <div class="eg"><span class="l">Support example</span>
+        <p>The model sees the approved policy pack and nothing else. No general web knowledge invoked, no retrieval from old resolved tickets where a previous agent may have made a mistake, no marketing copy. The pack is versioned, and a policy change is a pack change with a date.</p></div>
+      <div class="meta">
+        <div><span class="k">Cost</span><span class="v hi">Low to medium</span></div>
+        <div><span class="k">Measurable</span><span class="v md">Partly. You can audit the corpus, not the prevention</span></div>
+        <div><span class="k">Weakness</span><span class="v">The model can still assert beyond what the pack supports</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl ours">
+    <div class="hd"><span class="num">03</span><span class="nm">Constraint control</span><span class="tag pick">This is the one we measure</span></div>
+    <div class="bd">
+      <p>Shape what a valid output looks like, so an unsupported claim is structurally impossible rather than merely discouraged.</p>
+      <div class="eg"><span class="l">Support example, the grounded claim rule</span>
+        <p>Every commitment about money, entitlement, timing or data must quote a clause identifier from the pack, verbatim. The reply is emitted as structured output with <code>answer</code>, <code>commitments[]</code> and <code>citations[]</code>. If no clause supports the commitment, the model must escalate instead of answering. Abstention is a correct outcome, not a failure.</p></div>
+      <div class="meta">
+        <div><span class="k">Cost</span><span class="v hi">Low, a prompt and a schema</span></div>
+        <div><span class="k">Measurable</span><span class="v hi">Yes, deterministically</span></div>
+        <div><span class="k">Weakness</span><span class="v">A fabricated but plausible clause id defeats it</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <div class="hd"><span class="num">04</span><span class="nm">Automated check</span><span class="tag">Detective, pre send</span></div>
+    <div class="bd">
+      <p>Inspect the draft before it leaves. The natural partner to a constraint control, because the constraint creates something checkable.</p>
+      <div class="eg"><span class="l">Support example</span>
+        <p>A script verifies that every cited clause identifier actually exists in the pack, and that the clause genuinely supports the claim being made, using the clause to claim map authored with the cases. It blocks replies containing money language such as "full refund" or "we will credit" that carry no valid citation. Blocked replies escalate rather than silently drop.</p></div>
+      <div class="meta">
+        <div><span class="k">Cost</span><span class="v hi">Low, a script plus its tests</span></div>
+        <div><span class="k">Measurable</span><span class="v hi">Yes, deterministically</span></div>
+        <div><span class="k">Weakness</span><span class="v">Shares a blind spot with control 03</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <div class="hd"><span class="num">05</span><span class="nm">Human review</span><span class="tag">Detective, pre send</span></div>
+    <div class="bd">
+      <p>A person reads it. The most trusted control, the most expensive, and the one this whole project is trying to let you safely reduce.</p>
+      <div class="eg"><span class="l">Support example, three variants</span>
+        <p><strong>Full:</strong> every AI answer read before sending. <strong>Sampled:</strong> a random share, which catches systemic problems but not the specific bad answer in front of the customer. <strong>Triggered:</strong> review only replies containing a money commitment, a retention timeline, or a stratum D pressure signal. Triggered review is usually the best value and almost nobody starts there.</p></div>
+      <div class="meta">
+        <div><span class="k">Cost</span><span class="v lo">High and recurring</span></div>
+        <div><span class="k">Measurable</span><span class="v lo">Expensive. Needs humans in the loop 360 times</span></div>
+        <div><span class="k">Weakness</span><span class="v">Attention decays. A reviewer approving 200 a day is not reading 200</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <div class="hd"><span class="num">06</span><span class="nm">Monitoring</span><span class="tag">Post send</span></div>
+    <div class="bd">
+      <p>Detect that harm is happening, faster than you otherwise would. Does not prevent anything.</p>
+      <div class="eg"><span class="l">Support example</span>
+        <p>Track reopen rate on AI-handled tickets against human-handled ones as the leading indicator. Audit 20 random AI answers against policy weekly. Alert when the AI reopen rate exceeds baseline by more than two points for three consecutive days. Alert on any customer reply containing "you told me", which is the cheapest unsupported-commitment detector in existence.</p></div>
+      <div class="meta">
+        <div><span class="k">Cost</span><span class="v hi">Low ongoing</span></div>
+        <div><span class="k">Measurable</span><span class="v md">Yes, but slowly. It is longitudinal</span></div>
+        <div><span class="k">Weakness</span><span class="v">Reduces duration of harm, never its occurrence</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <div class="hd"><span class="num">07</span><span class="nm">Correction</span><span class="tag">Post send</span></div>
+    <div class="bd">
+      <p>Limit the damage once a commitment has been made. The control that changes severity rather than frequency, which is why it never appears in an effectiveness number and still matters enormously.</p>
+      <div class="eg"><span class="l">Support example</span>
+        <p>A documented retraction procedure with an owner and a time limit. A make good policy that says when the company honours an incorrect commitment rather than fighting it, which is often cheaper than the argument. An escalation path with a named role and an SLA. A standing decision that any incorrectly promised refund under a stated amount is simply paid.</p></div>
+      <div class="meta">
+        <div><span class="k">Cost</span><span class="v md">Low to hold, real when used</span></div>
+        <div><span class="k">Measurable</span><span class="v md">By time to correct, not by failure rate</span></div>
+        <div><span class="k">Weakness</span><span class="v">Invisible to the economic model entirely</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">03</span><h2>Why we measure control 03 first</h2></div>
+  <p class="lede">Not because it is the most important. Because it is the one whose effectiveness can be measured cheaply and honestly.</p>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>Control</th><th>Cost to run</th><th>Cost to measure</th><th>First candidate?</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">01 Scope</td><td>Very low</td><td>Low, but nothing interesting to learn</td><td>No, effectiveness is near certain by construction</td></tr>
+        <tr><td class="dim">02 Grounding</td><td>Low</td><td>High, prevention is not observable</td><td>No</td></tr>
+        <tr class="pick"><td class="dim">03 Constraint</td><td>Low</td><td>Low, deterministic to grade</td><td>Yes</td></tr>
+        <tr><td class="dim">04 Auto check</td><td>Low</td><td>Low</td><td>Second, and it pairs with 03</td></tr>
+        <tr><td class="dim">05 Human review</td><td>High</td><td>Very high, needs real reviewers</td><td>No, and this is the point</td></tr>
+        <tr><td class="dim">06 Monitoring</td><td>Low</td><td>Months, longitudinal</td><td>Later</td></tr>
+        <tr><td class="dim">07 Correction</td><td>Low to hold</td><td>Different measure entirely</td><td>Not measurable this way</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="call acc">
+    <span class="lbl">The selection principle</span>
+    <p>Measure controls whose effect can be graded without a human in the loop. Not because human judgement is unreliable, but because a control you can grade with a script can be measured 360 times for a few dollars, and one you cannot is a research project.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">04</span><h2>How controls stack</h2></div>
+  <p class="lede">The most common error in governance documents, and it is arithmetic rather than judgement.</p>
+  <div class="call warn">
+    <span class="lbl">Effectiveness does not add</span>
+    <p>A 60 percent control plus a 50 percent control is not 110 percent. Each acts on what the previous one left behind, so the residuals multiply.</p>
+  </div>
+  <div class="math">
+Start with <b>420</b> wrong answers a month.<br><br>
+Control 03, grounded claim, 60% effective<br>
+&nbsp;&nbsp;residual = 420 x (1 - 0.60) = <b>168</b><br><br>
+Control 04, automated clause check, 50% of what is left<br>
+&nbsp;&nbsp;residual = 168 x (1 - 0.50) = <b>84</b><br><br>
+Control 05, human review at 30% coverage catching 90% of what it sees<br>
+&nbsp;&nbsp;residual = 84 x (1 - 0.30 x 0.90) = <b>61.3</b><br><br>
+Combined effectiveness = 1 - (61.3 / 420) = <span class="g">85.4%</span><br>
+Naive sum would have said <span class="r">60 + 50 + 27 = 137%</span>, which is meaningless.
+  </div>
+  <div class="call warn">
+    <span class="lbl">The trap underneath the arithmetic</span>
+    <p>That multiplication assumes the controls fail independently. They often do not.</p>
+    <p>Controls 03 and 04 both depend on a clause identifier being present and checkable. A model that fabricates a plausible looking clause id defeats both at once. When two controls share a mechanism, they share a blind spot, and the real combined effectiveness is worse than the multiplication suggests.</p>
+    <p>This is why the evaluation grades against ground truth rather than against the citation alone. It is also an argument for pairing controls that work differently: a structural constraint with a human sample beats two structural constraints.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="n">05</span><h2>Choosing a stack for support</h2></div>
+  <p class="lede">A defensible starting configuration, and what each layer is doing.</p>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>Layer</th><th>Setting</th><th>Doing what</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">01 Scope</td><td>Four question categories only</td><td>Removes the whole classes of harm you cannot model</td></tr>
+        <tr><td class="dim">02 Grounding</td><td>Versioned policy pack, nothing else</td><td>Limits what can be asserted in the first place</td></tr>
+        <tr class="pick"><td class="dim">03 Constraint</td><td>Grounded claim, mandatory</td><td>Makes unsupported commitments structurally visible</td></tr>
+        <tr><td class="dim">04 Auto check</td><td>Clause validation, blocking</td><td>Catches what the constraint declared but got wrong</td></tr>
+        <tr><td class="dim">05 Human review</td><td>Triggered, plus a 10 percent sample</td><td>Money commitments always seen. Sample catches drift</td></tr>
+        <tr><td class="dim">06 Monitoring</td><td>Reopen rate, weekly audit of 20</td><td>Tells you when the measurement has gone stale</td></tr>
+        <tr><td class="dim">07 Correction</td><td>Documented retraction, make good under a threshold</td><td>Turns a severity 3 into a severity 2</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="call">
+    <span class="lbl">Note on layer 05</span>
+    <p>Triggered review plus a small random sample is almost always better than a flat percentage, and it is what the strata are for. Every stratum D pressure case and every reply containing a money commitment gets human eyes. Stratum A straightforward answers get sampled. That is a defensible policy you can write in one sentence, and it costs a fraction of reviewing 30 percent of everything.</p>
+  </div>
+</section>
+
+<footer>
+  <span>AI Value Lab &middot; control reference</span>
+  <span>Support, FM-01 unsupported policy assertion</span>
+  <span>Control 03 measured in slice 01</span>
+</footer>
+
+</div>

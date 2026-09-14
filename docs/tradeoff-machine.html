@@ -1,0 +1,360 @@
+<title>The Tradeoff Machine</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --background:220 20% 97%; --foreground:220 25% 10%;
+  --card:0 0% 100%; --primary:250 30% 40%; --primary-glow:270 25% 45%;
+  --secondary:220 15% 92%; --muted-foreground:220 10% 50%;
+  --accent:165 25% 36%; --destructive:0 72% 45%; --warn:40 85% 32%;
+  --border:220 15% 88%; --ring:250 65% 55%; --radius:0.75rem;
+  --gradient-primary:linear-gradient(135deg, hsl(250 30% 40%), hsl(270 25% 45%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 30% 40% / 0.12);
+  --shadow-card:0 2px 20px -4px hsl(220 25% 10% / 0.08);
+  --ok:220 12% 78%;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --background:225 25% 8%; --foreground:220 15% 90%;
+  --card:225 20% 12%; --primary:250 40% 55%; --primary-glow:270 35% 60%;
+  --secondary:225 15% 18%; --muted-foreground:220 10% 55%;
+  --accent:165 35% 45%; --destructive:0 62% 52%; --warn:40 75% 60%;
+  --border:225 15% 18%; --ring:250 65% 65%;
+  --gradient-primary:linear-gradient(135deg, hsl(250 65% 65%), hsl(280 70% 70%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 65% 65% / 0.2);
+  --shadow-card:0 2px 20px -4px hsl(0 0% 0% / 0.3);
+  --ok:225 10% 35%;
+}}
+:root[data-theme="dark"]{
+  --background:225 25% 8%; --foreground:220 15% 90%;
+  --card:225 20% 12%; --primary:250 40% 55%; --primary-glow:270 35% 60%;
+  --secondary:225 15% 18%; --muted-foreground:220 10% 55%;
+  --accent:165 35% 45%; --destructive:0 62% 52%; --warn:40 75% 60%;
+  --border:225 15% 18%; --ring:250 65% 65%;
+  --gradient-primary:linear-gradient(135deg, hsl(250 65% 65%), hsl(280 70% 70%));
+  --shadow-elegant:0 4px 30px -8px hsl(250 65% 65% / 0.2);
+  --shadow-card:0 2px 20px -4px hsl(0 0% 0% / 0.3);
+  --ok:225 10% 35%;
+}
+*{box-sizing:border-box}
+body{background:hsl(var(--background));color:hsl(var(--foreground));
+  font-family:'Space Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.6;
+  padding:0 20px;padding-block:0 80px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto}
+h1,h2,h3{font-family:'Syne',system-ui,sans-serif;font-weight:700;letter-spacing:-.02em}
+
+header.mast{padding-block:56px 28px;display:flex;flex-direction:column;gap:13px;border-bottom:1px solid hsl(var(--border))}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:hsl(var(--accent));font-weight:500}
+h1{font-size:clamp(2.1rem,5vw,3.1rem);line-height:1.05;margin:0}
+h1 .grad{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.standfirst{font-size:1.1rem;line-height:1.6;color:hsl(var(--muted-foreground));max-width:60ch;margin:0;font-weight:300}
+
+section{margin-block:46px 0}
+h2{font-size:1.6rem;line-height:1.2;margin:0 0 6px}
+.lede{margin:0 0 22px;color:hsl(var(--muted-foreground));font-size:15px;max-width:68ch;font-weight:300}
+p{max-width:70ch;margin:0 0 15px}
+
+/* stage */
+.stage{background:hsl(var(--card));border:1px solid hsl(var(--border));border-radius:var(--radius);
+  box-shadow:var(--shadow-card);padding:26px 26px 24px;margin-bottom:20px}
+
+.scale{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:hsl(var(--muted-foreground))}
+.scale b{color:hsl(var(--foreground));font-weight:500}
+.scale .ar{color:hsl(var(--accent))}
+
+.barwrap{margin-bottom:8px}
+.barlabel{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:hsl(var(--muted-foreground))}
+.bar{display:flex;height:52px;border-radius:8px;overflow:hidden;gap:2px;background:hsl(var(--secondary))}
+.seg{height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  transition:width .45s cubic-bezier(.4,0,.2,1);min-width:0}
+.seg span{font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;white-space:nowrap;
+  padding:0 6px;font-weight:500}
+.seg.ctl{background:hsl(var(--accent))}
+.seg.rev{background:hsl(var(--primary))}
+.seg.esc{background:hsl(var(--destructive))}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-size:12.5px;color:hsl(var(--muted-foreground))}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px;vertical-align:-1px}
+
+/* counters */
+.counters{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+@media (max-width:620px){.counters{grid-template-columns:1fr}}
+.ctr{border:1px solid hsl(var(--border));border-radius:var(--radius);padding:18px 20px 20px;
+  background:hsl(var(--background))}
+.ctr .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:hsl(var(--muted-foreground));display:block;margin-bottom:8px}
+.ctr .v{font-family:'Syne',sans-serif;font-size:2.3rem;font-weight:700;line-height:1;
+  letter-spacing:-.03em;display:block;transition:color .3s}
+.ctr .d{font-size:12.5px;color:hsl(var(--muted-foreground));display:block;margin-top:8px;font-weight:300}
+.ctr.harm .v{color:hsl(var(--destructive))}
+.ctr.harm.better .v{color:hsl(var(--accent))}
+.ctr.money .v{color:hsl(var(--accent))}
+.delta{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:2px 7px;border-radius:999px;
+  margin-left:9px;vertical-align:6px;font-weight:500}
+.delta.up{background:hsl(var(--destructive)/.14);color:hsl(var(--destructive))}
+.delta.down{background:hsl(var(--accent)/.14);color:hsl(var(--accent))}
+.delta.flat{background:hsl(var(--secondary));color:hsl(var(--muted-foreground))}
+
+/* controls */
+.controls{margin-top:26px;padding-top:24px;border-top:1px solid hsl(var(--border))}
+.ctrl{margin-bottom:22px}
+.ctrl:last-child{margin-bottom:0}
+.ctrl .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:12px;flex-wrap:wrap}
+.ctrl .nm{font-size:14.5px;font-weight:500}
+.ctrl .val{font-family:'JetBrains Mono',monospace;font-size:15px;color:hsl(var(--primary));font-weight:500}
+.ctrl .hint{font-size:12.5px;color:hsl(var(--muted-foreground));font-weight:300;margin-top:8px;display:block}
+input[type=range]{width:100%;accent-color:hsl(var(--primary));height:26px;cursor:pointer}
+
+/* narrative */
+.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:22px}
+button.btn{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;padding:10px 20px;
+  border-radius:calc(var(--radius) - 4px);cursor:pointer;border:1px solid hsl(var(--border));
+  background:hsl(var(--card));color:hsl(var(--foreground))}
+button.btn:hover:not(:disabled){border-color:hsl(var(--primary));color:hsl(var(--primary))}
+button.btn.pri{background:var(--gradient-primary);color:#fff;border-color:transparent}
+button.btn.pri:hover{opacity:.9;color:#fff}
+button.btn:disabled{opacity:.4;cursor:not-allowed}
+.stepno{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:hsl(var(--muted-foreground));margin-left:auto}
+.narr{background:hsl(var(--secondary)/.55);border-radius:var(--radius);padding:20px 22px;margin-bottom:22px;
+  border-left:3px solid hsl(var(--primary))}
+.narr .t{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;margin:0 0 8px;letter-spacing:-.02em}
+.narr p{margin:0;font-size:15px;line-height:1.55;max-width:64ch}
+
+.flash{background:hsl(var(--accent)/.1);border:1px solid hsl(var(--accent)/.35);border-radius:var(--radius);
+  padding:15px 18px;margin-top:20px;font-size:14.5px;line-height:1.55}
+.flash b{color:hsl(var(--accent))}
+.flash.hide{display:none}
+
+.call{border-left:3px solid hsl(var(--primary));background:hsl(var(--card));padding:17px 19px;margin:20px 0;
+  border-radius:calc(var(--radius) - 2px);box-shadow:var(--shadow-card)}
+.call.warn{border-left-color:hsl(var(--warn))}
+.call .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:hsl(var(--primary));display:block;margin-bottom:7px;font-weight:600}
+.call.warn .lbl{color:hsl(var(--warn))}
+.call p{margin:0;font-size:15px;line-height:1.55}
+.call p + p{margin-top:11px}
+
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:14px}
+.tc{background:hsl(var(--card));border:1px solid hsl(var(--border));border-radius:var(--radius);
+  padding:18px 19px 20px;box-shadow:var(--shadow-card)}
+.tc .n{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:hsl(var(--muted-foreground));display:block;margin-bottom:9px}
+.tc .q{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin:0 0 8px;letter-spacing:-.01em}
+.tc p{margin:0;font-size:13.5px;color:hsl(var(--muted-foreground));font-weight:300;line-height:1.5;max-width:none}
+
+footer{margin-top:52px;padding-top:22px;border-top:1px solid hsl(var(--border));
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;color:hsl(var(--muted-foreground));
+  display:flex;flex-wrap:wrap;gap:8px 22px}
+:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.seg{transition:none}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">AI Value Lab &middot; learning tool</div>
+  <h1>The <span class="grad">Tradeoff</span> Machine</h1>
+  <p class="standfirst">Six steps, then it is yours to play with. The point is not to read the tradeoff. It is to move it and watch two numbers fight each other.</p>
+</header>
+
+<section>
+  <div class="narr" id="narr">
+    <p class="t" id="ntitle">Start here</p>
+    <p id="ntext">Press Next. Each step adds one piece, and nothing moves until you move it.</p>
+  </div>
+
+  <div class="stage">
+    <div class="scale" id="scale">
+      <span><b>10,000</b> tickets</span><span class="ar">&rarr;</span>
+      <span>AI drafts <b>7,000</b></span><span class="ar">&rarr;</span>
+      <span><b>420</b> assert something policy does not support</span>
+    </div>
+
+    <div class="barwrap">
+      <div class="barlabel"><span>What happens to those 420 wrong answers</span><span id="barsum"></span></div>
+      <div class="bar" id="bar">
+        <div class="seg ctl" id="s-ctl" style="width:0%"><span></span></div>
+        <div class="seg rev" id="s-rev" style="width:0%"><span></span></div>
+        <div class="seg esc" id="s-esc" style="width:100%"><span></span></div>
+      </div>
+      <div class="legend">
+        <span><i style="background:hsl(var(--accent))"></i>Caught by the control</span>
+        <span><i style="background:hsl(var(--primary))"></i>Caught by human review</span>
+        <span><i style="background:hsl(var(--destructive))"></i>Reaches the customer</span>
+      </div>
+    </div>
+
+    <div class="counters">
+      <div class="ctr harm" id="c-harm">
+        <span class="k">Wrong answers reaching customers</span>
+        <span class="v"><span id="v-esc">420</span><span class="delta flat" id="d-esc">vs 126 today</span></span>
+        <span class="d" id="d-harm">Every month.</span>
+      </div>
+      <div class="ctr money" id="c-money">
+        <span class="k">Annual saving</span>
+        <span class="v"><span id="v-money">$291k</span><span class="delta flat" id="d-money">vs today</span></span>
+        <span class="d" id="d-money-d">From agent hours you stop spending.</span>
+      </div>
+    </div>
+
+    <div class="flash hide" id="flash"></div>
+
+    <div class="controls" id="controls" style="display:none">
+      <div class="ctrl">
+        <div class="top"><span class="nm">Human review rate</span><span class="val" id="lab-v">70%</span></div>
+        <input type="range" id="sl-v" min="0" max="100" step="5" value="70">
+        <span class="hint">How many AI answers a person checks before they go out. Drag it left to save money.</span>
+      </div>
+      <div class="ctrl">
+        <div class="top"><span class="nm">Control effectiveness</span><span class="val" id="lab-x">0%</span></div>
+        <input type="range" id="sl-x" min="0" max="95" step="5" value="0">
+        <span class="hint">How much of the failure the grounded claim rule removes before review even looks. This is the number the experiment measures.</span>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn" id="prev" type="button">Back</button>
+      <button class="btn pri" id="next" type="button">Next</button>
+      <button class="btn" id="play" type="button" style="display:none">Reset to today</button>
+      <span class="stepno" id="stepno">Step 1 of 6</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Three things to try</h2>
+  <p class="lede">Once the sliders are live, these three moves are the whole framework.</p>
+  <div class="three">
+    <div class="tc"><span class="n">Try this first</span><p class="q">Drag review to 30 percent</p>
+      <p>Watch the money go up by about $50,000 and the escapes more than double. That tension is the entire decision. Everything else is detail.</p></div>
+    <div class="tc"><span class="n">Then</span><p class="q">Raise the control until escapes return to 126</p>
+      <p>You will land near 57 percent. You just found the quality neutral point by hand. It is the number that should drive the recommendation.</p></div>
+    <div class="tc"><span class="n">Then</span><p class="q">Set the control to 75 and review to 0</p>
+      <p>Escapes fall below today's level with no human checking at all. The arithmetic says do it. Section below says why you should refuse.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>What you just learned</h2>
+  <div class="call">
+    <span class="lbl">The one sentence</span>
+    <p>Money and customer harm move in the same direction when you change review, and in opposite directions when you change the control. So the control is the only thing that buys you both, and the only way to know how good it is, is to measure it.</p>
+  </div>
+  <div class="call warn">
+    <span class="lbl">The trap</span>
+    <p>At high control effectiveness the machine will happily tell you to remove human review entirely. It is arithmetically right and practically wrong.</p>
+    <p>It counts every error the same, so one wrong refund commitment weighs the same as fifty clumsy phrasings. It cannot see that a hundred errors in one week is a crisis while the same hundred over a year is survivable. It does not know review also trains agents and surfaces policy gaps. And it has no idea some review is contractually required.</p>
+    <p>When a model recommends something nobody would do, the model is missing a constraint. Use it as a floor, then apply the constraints it cannot see.</p>
+  </div>
+</section>
+
+<footer>
+  <span>AI Value Lab &middot; tradeoff machine</span>
+  <span>Inputs from models.py, all assumed</span>
+  <span>Error rate 6% is itself unmeasured</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var T=10000,Mh=10,R=45,Wc=0.08,Mwc=6,A=0.70,S=6,Mv=2,E=0.06,Mwa=6,C=0.08;
+  var ad=T*A, man=T-ad, errs=ad*E;
+  var base=(T*Mh+T*Wc*Mwc)/60*R;
+  var TODAY_ESC=errs*(1-0.70);
+
+  function saving(V,X){
+    var m=ad*(Mh-S)+ad*V*Mv+ad*E*(1-X)*Mwa+man*Mh+man*Wc*Mwc;
+    return (base-(m/60*R+ad*C))*12;
+  }
+  function escaped(V,X){ return errs*(1-X)*(1-V); }
+  var TODAY_MONEY=saving(0.70,0);
+
+  var usdK=function(n){var a=Math.abs(n);return (n<0?"-$":"$")+(a>=1000?Math.round(a/1000)+"k":Math.round(a));};
+
+  var V=0.70, X=0.00, step=1, MAXSTEP=6;
+
+  var STEPS=[
+    {t:"10,000 tickets a month",
+     x:"The AI drafts 70 percent of them, so 7,000 answers. At the assumed 6 percent error rate, 420 of those assert something the policy does not actually support. That red bar is those 420. Right now nothing is catching any of them."},
+    {t:"Today you review 70 percent",
+     x:"A person checks 7 answers in 10 before they go out, and catches the errors in what they see. The blue block is what review catches. 126 still reach customers, because nobody looks at the other 30 percent. That 126 is your baseline. Remember it."},
+    {t:"Now cut review to 30 percent",
+     x:"You just freed about $50,400 a year of agent time. Look at the red block. Escapes went from 126 to 294. You more than doubled the harm to buy the saving, and nothing else changed."},
+    {t:"This is why controls exist",
+     x:"The control makes the AI cite the clause that permits any commitment, or escalate instead of answering. It works before review, on every answer. Watch the green block appear as it becomes 40 percent effective, and watch the red shrink."},
+    {t:"Find where it balances",
+     x:"At about 57 percent effective, escapes return to 126, exactly where you started. And the saving is now about $63,000 rather than $50,400, because a control that stops errors also stops the rework they cause. It pays twice. That is the quality neutral point, and it is the number that should drive the decision."},
+    {t:"Now it is yours",
+     x:"The sliders are live. Move review and the money and the harm move together. Move the control and they move apart. Try the three suggestions below the panel."}
+  ];
+  var PRESETS=[[0.70,0],[0.70,0],[0.30,0],[0.30,0.40],[0.30,0.571],[0.30,0.571]];
+  var REVEAL=[false,false,false,false,false,true];
+
+  var el=function(i){return document.getElementById(i);};
+
+  function render(){
+    var esc=escaped(V,X), money=saving(V,X);
+    var caughtC=errs*X, caughtR=errs*(1-X)*V;
+    var tot=errs;
+    el("s-ctl").style.width=(caughtC/tot*100).toFixed(2)+"%";
+    el("s-rev").style.width=(caughtR/tot*100).toFixed(2)+"%";
+    el("s-esc").style.width=(esc/tot*100).toFixed(2)+"%";
+    el("s-ctl").firstChild.textContent = caughtC/tot>0.10 ? Math.round(caughtC) : "";
+    el("s-rev").firstChild.textContent = caughtR/tot>0.10 ? Math.round(caughtR) : "";
+    el("s-esc").firstChild.textContent = esc/tot>0.10 ? Math.round(esc) : "";
+    el("barsum").textContent="420 wrong answers";
+
+    el("v-esc").textContent=Math.round(esc);
+    var dE=esc-TODAY_ESC, de=el("d-esc");
+    if(Math.abs(dE)<3){ de.className="delta flat"; de.textContent="same as today"; }
+    else if(dE>0){ de.className="delta up"; de.textContent="+"+Math.round(dE)+" vs today"; }
+    else { de.className="delta down"; de.textContent=Math.round(dE)+" vs today"; }
+    el("c-harm").className="ctr harm"+(dE<-3?" better":"");
+
+    el("v-money").textContent=usdK(money);
+    var dM=money-TODAY_MONEY, dm=el("d-money");
+    if(Math.abs(dM)<1000){ dm.className="delta flat"; dm.textContent="same as today"; }
+    else if(dM>0){ dm.className="delta down"; dm.textContent="+"+usdK(dM); }
+    else { dm.className="delta up"; dm.textContent=usdK(dM); }
+
+    el("lab-v").textContent=Math.round(V*100)+"%";
+    el("lab-x").textContent=Math.round(X*100)+"%";
+    el("sl-v").value=Math.round(V*100);
+    el("sl-x").value=Math.round(X*100);
+
+    var f=el("flash");
+    if(Math.abs(dE)<4 && dM>1000){
+      f.className="flash";
+      f.innerHTML="<b>You found the balance.</b> Customers see the same number of bad answers as today, and you are "+usdK(dM)+" a year better off. This is the quality neutral point, at about "+Math.round(X*100)+" percent control effectiveness.";
+    } else if(dE<-4 && dM>1000){
+      f.className="flash";
+      f.innerHTML="<b>Better on both.</b> "+Math.abs(Math.round(dE))+" fewer bad answers a month than today, and "+usdK(dM)+" a year more. If the measurement supports it, this is a strong recommendation.";
+    } else { f.className="flash hide"; }
+  }
+
+  function applyStep(){
+    var s=STEPS[step-1];
+    el("ntitle").textContent=s.t;
+    el("ntext").textContent=s.x;
+    el("stepno").textContent="Step "+step+" of "+MAXSTEP;
+    V=PRESETS[step-1][0]; X=PRESETS[step-1][1];
+    el("controls").style.display=REVEAL[step-1]?"block":"none";
+    el("play").style.display=REVEAL[step-1]?"inline-block":"none";
+    el("prev").disabled=(step===1);
+    el("next").disabled=(step===MAXSTEP);
+    el("next").textContent=(step===MAXSTEP-1)?"Hand it over":"Next";
+    render();
+  }
+
+  el("next").addEventListener("click",function(){ if(step<MAXSTEP){step++;applyStep();} });
+  el("prev").addEventListener("click",function(){ if(step>1){step--;applyStep();} });
+  el("play").addEventListener("click",function(){ V=0.70;X=0;render(); });
+  el("sl-v").addEventListener("input",function(e){ V=parseInt(e.target.value,10)/100; render(); });
+  el("sl-x").addEventListener("input",function(e){ X=parseInt(e.target.value,10)/100; render(); });
+
+  applyStep();
+})();
+</script>
