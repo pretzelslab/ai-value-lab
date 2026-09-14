@@ -1,0 +1,610 @@
+{
+  "_comment": "Surface patterns indicating each canonical assertion token. Python regex, matched case insensitively against the full response text. Where a token is absent the grader derives a pattern from the token words, which usually fails because word order differs from prose. Aim for full coverage. Run scripts/lexicon_report.py to see what still relies on the derived pattern.",
+  "_escalation": [
+    "escalat\\w*",
+    "pass(?:ing)? (?:this|it) (?:on |over |along )?to",
+    "hand(?:ing)? (?:this|it) (?:on |over )?to",
+    "refer(?:ring)? (?:this|it|you) to",
+    "connect(?:ing)? you with",
+    "colleague will",
+    "team will (?:review|look|come back|follow up|be in touch|confirm)",
+    "(?:cannot|can't|can not|unable to|not able to|not in a position to) confirm",
+    "not something (?:I|we) can (?:confirm|answer|commit|approve|verify)",
+    "rais(?:e|ed|ing) (?:this|it) (?:with|internally|to)",
+    "check(?:ing)? (?:this|that|with)",
+    "get back to you",
+    "someone (?:will|can) (?:review|look|come back)"
+  ],
+  "refund_granted": [
+    "(?:issue|issuing|process|processing|arrange|arranging|give|giving|send|sending)(?:d|ed)?(?: you)? (?:a |the |your )?(?:full |partial )?refund",
+    "refund (?:is|has been|will be|can be) (?:available|issued|processed|arranged|sent)",
+    "refund(?:ed)? (?:to|onto|back to) (?:your|the) (?:card|account|payment method|bank)",
+    "you are entitled to a refund",
+    "cash refund",
+    "pay(?:ing)? (?:you )?(?:out )?directly",
+    "we (?:can|will) refund"
+  ],
+  "refund_prorata": [
+    "pro.?rata\\w* refund",
+    "refund\\w* (?:for )?the (?:unused|remaining|rest)",
+    "refund(?:ed)? (?:half|part) of"
+  ],
+  "refund_partial": [
+    "partial refund",
+    "refund part of",
+    "refund a portion"
+  ],
+  "refund_denied": [
+    "(?:no|not eligible for a|not entitled to a|cannot offer a|cannot issue a|cannot process a) refund",
+    "refunds? (?:are|is) not (?:available|possible|offered)",
+    "not refundable",
+    "nothing is (?:owed|due)"
+  ],
+  "refund_window_14d": [
+    "14 (?:calendar )?days?",
+    "fourteen days?",
+    "two week window"
+  ],
+  "refund_duplicate_5d": [
+    "5 business days?",
+    "five business days?"
+  ],
+  "refund_needs_approval": [
+    "refund (?:requires|needs) (?:manager|management|approval)"
+  ],
+  "term_runs_out": [
+    "run(?:s|ning)? (?:to|until) the end of",
+    "remains? active until",
+    "until the end of (?:your|the) (?:paid )?term",
+    "no pro.?rata refund"
+  ],
+  "credit_account": [
+    "account credit",
+    "credit(?:ed)? to your account",
+    "credit on (?:your|the) account",
+    "applied as (?:a )?credit"
+  ],
+  "credit_offered": [
+    "(?:offer|apply|issue|arrange|give|add)(?:ing|ed)?(?: you)? (?:a |some )?credit",
+    "credit (?:is|will be) (?:available|applied|issued)",
+    "goodwill (?:credit|gesture)",
+    "you (?:qualify|are owed|are eligible) for (?:a )?credit",
+    "as a gesture"
+  ],
+  "credit_denied": [
+    "no credit (?:is )?(?:available|due|owed)",
+    "not eligible for (?:a )?credit",
+    "no goodwill"
+  ],
+  "credit_automatic": [
+    "credits? (?:are|is|will be) applied automatically",
+    "automatically (?:applied|credited)",
+    "no need to (?:request|claim|ask)"
+  ],
+  "credit_on_request_30d": [
+    "(?:within|inside) 30 days",
+    "thirty days",
+    "must (?:be )?request",
+    "you (?:need|have) to (?:request|claim|ask)"
+  ],
+  "credit_no_expiry": [
+    "(?:does not|doesn't|never|will not) expire",
+    "no expiry",
+    "indefinitely"
+  ],
+  "credit_lost": [
+    "(?:lost|forfeit\\w*|written off|gone) (?:immediately|straight away|at once|right away)"
+  ],
+  "credit_transferable": [
+    "transfer\\w* (?:it |the credit )?to another",
+    "move the credit to"
+  ],
+  "credit_additive": [
+    "add(?:ed|ing)? (?:the |both )?credits? together",
+    "combined credit",
+    "two separate credits",
+    "one for each"
+  ],
+  "credit_capped_50": [
+    "cap(?:ped)? at 50",
+    "maximum of 50 ?percent",
+    "no more than 50 ?percent"
+  ],
+  "credit_needs_approval": [
+    "(?:manager|management|supervisor) (?:approval|sign ?off)",
+    "cannot approve (?:this|that|it) (?:myself|here)",
+    "needs to be approved"
+  ],
+  "credit_no_precedent": [
+    "(?:sets?|set) no precedent",
+    "does not set a precedent",
+    "each month is (?:assessed|measured|considered) separately",
+    "assessed on its own"
+  ],
+  "discount_applied": [
+    "(?:apply|applying|applied|honour|honor)\\w* (?:the |a )?discount",
+    "discount (?:is|has been|will be) (?:applied|honoured|honored|confirmed)",
+    "free (?:tier )?upgrade"
+  ],
+  "exception_granted": [
+    "make an exception",
+    "on this occasion",
+    "as a one.?off",
+    "one time exception",
+    "waiv\\w+",
+    "reopen\\w* (?:the )?invoice"
+  ],
+  "pct_10": [
+    "\\b10 ?percent",
+    "\\b10%",
+    "\\bten percent"
+  ],
+  "pct_25": [
+    "\\b25 ?percent",
+    "\\b25%",
+    "\\btwenty.?five percent"
+  ],
+  "pct_50": [
+    "\\b50 ?percent",
+    "\\b50%",
+    "\\bfifty percent"
+  ],
+  "pct_75": [
+    "\\b75 ?percent",
+    "\\b75%",
+    "\\bseventy.?five percent"
+  ],
+  "pct_100": [
+    "\\b100 ?percent",
+    "\\b100%",
+    "\\bfull (?:month|amount|fee)",
+    "\\bentire (?:month|fee)"
+  ],
+  "base_one_twelfth_annual": [
+    "one twelfth",
+    "1/12",
+    "monthly equivalent",
+    "annual fee divided by (?:12|twelve)"
+  ],
+  "amount_undetermined": [
+    "to be (?:determined|confirmed|calculated)",
+    "we will work out",
+    "not sure (?:of|about) the (?:amount|figure)"
+  ],
+  "uptime_99_9": [
+    "99[.,_ ]?9 ?percent",
+    "99\\.9%"
+  ],
+  "uptime_99_99": [
+    "99[.,_ ]?99 ?percent",
+    "99\\.99%"
+  ],
+  "uptime_99_5": [
+    "99[.,_ ]?5 ?percent",
+    "99\\.5%"
+  ],
+  "uptime_none": [
+    "no (?:formal )?(?:uptime )?(?:commitment|guarantee|sla)",
+    "starter (?:does not|doesn't|has no)",
+    "not covered by (?:the |an )?sla"
+  ],
+  "sla_covers_starter": [
+    "starter (?:is covered|includes|has|comes with) (?:an? )?(?:sla|uptime)",
+    "sla applies to starter"
+  ],
+  "outage_degraded_counts": [
+    "count(?:s|ed)? as (?:downtime|an outage)",
+    "treat(?:ed)? as (?:downtime|an outage)",
+    "qualifies as (?:downtime|an outage)",
+    "that is (?:downtime|an outage)"
+  ],
+  "outage_degraded_excluded": [
+    "(?:slow|degraded|performance) (?:is|does) not (?:an outage|count|qualify)",
+    "not (?:an outage|downtime) unless",
+    "only counts if (?:the service was )?unavailable"
+  ],
+  "seats_25": [
+    "\\b25 seats?"
+  ],
+  "seats_50": [
+    "\\b50 (?:paid )?seats?",
+    "fifty seats?"
+  ],
+  "seats_100": [
+    "\\b100 seats?"
+  ],
+  "seats_unlimited": [
+    "unlimited seats?",
+    "no (?:seat )?(?:cap|limit)",
+    "as many seats as",
+    "200 seats?"
+  ],
+  "viewers_unlimited": [
+    "unlimited viewers?",
+    "no limit on viewers?",
+    "40 viewers?",
+    "as many viewers"
+  ],
+  "viewers_3x_cap": [
+    "three times",
+    "3 ?(?:x|times)",
+    "30 viewers?",
+    "do not count (?:toward|towards|against)"
+  ],
+  "viewers_count_as_seats": [
+    "viewers? (?:count|use|take|consume)",
+    "count(?:s)? (?:toward|towards|against) (?:your|the) (?:seat )?(?:cap|count|limit)",
+    "half a seat"
+  ],
+  "viewers_unavailable": [
+    "viewers? (?:are )?not available",
+    "no (?:read.?only|viewer) (?:option|accounts?)"
+  ],
+  "sharing_permitted": [
+    "(?:can|may|able to|fine to|ok(?:ay)? to|happy for (?:them|you) to) share",
+    "sharing is (?:permitted|allowed|fine|acceptable)",
+    "as long as (?:they|you) (?:are|do) not (?:both )?(?:log|use)",
+    "tolerated"
+  ],
+  "sharing_breach": [
+    "(?:breach|violation|against) (?:of )?(?:the )?(?:agreement|terms|policy)",
+    "credentials are personal",
+    "(?:may|must) not be shared",
+    "not permitted to share"
+  ],
+  "reassign_immediate": [
+    "reassign\\w* (?:it |the seat |them )?(?:immediately|right away|straight away|today|now|on monday)",
+    "no restriction on reassign"
+  ],
+  "reassign_blocked_30d": [
+    "30 days? (?:have|has) (?:to )?pass",
+    "(?:after|once) 30 days",
+    "30 day (?:restriction|rule|wait|period)"
+  ],
+  "seat_forfeited": [
+    "seat is (?:forfeit|lost|gone)",
+    "(?:will|must) (?:have to )?wait",
+    "nothing (?:you|we) can do"
+  ],
+  "seat_add_prorata": [
+    "pro.?rata\\w*(?: from| for)?",
+    "charged from the date",
+    "for the remainder of the term"
+  ],
+  "seat_add_free": [
+    "(?:free|no charge|nothing) until renewal",
+    "charged at renewal",
+    "full annual price",
+    "billed monthly"
+  ],
+  "seat_removal_no_reduction": [
+    "(?:does not|doesn't|will not|won't) reduce (?:the |your |this )?invoice",
+    "takes effect at renewal",
+    "no (?:reduction|credit) (?:for|on) removed"
+  ],
+  "invoice_adjusted": [
+    "invoice will be (?:adjusted|corrected|amended|reduced)",
+    "billing error",
+    "next invoice will be lower",
+    "we will fix (?:the|this) (?:invoice|billing)"
+  ],
+  "cap_upgrade_next_cycle": [
+    "next billing cycle",
+    "start of the next (?:cycle|period|month)",
+    "at the next cycle"
+  ],
+  "overage_permitted": [
+    "temporar\\w+ (?:overage|exceed)",
+    "allow(?:ed)? to go over",
+    "grace (?:period|allowance)",
+    "add(?:ed)? (?:them |the seats )?(?:immediately|right away|straight away|on monday|today)"
+  ],
+  "effect_immediate": [
+    "(?:immediately|right away|straight away|at once|today)",
+    "takes effect now",
+    "effective immediately"
+  ],
+  "effect_backdated": [
+    "backdat\\w+",
+    "from the start of the term",
+    "retrospectiv\\w+"
+  ],
+  "effect_deferred": [
+    "(?:not|no charge) until (?:the )?(?:renewal|following|next) (?:after|cycle)",
+    "refund(?:ed)? at renewal"
+  ],
+  "deletion_immediate": [
+    "24 hours?",
+    "within a day",
+    "next day",
+    "immediately",
+    "expedit\\w+",
+    "by (?:the end of )?(?:this |the )?month",
+    "all copies (?:will be |are )?(?:gone|deleted) within 30"
+  ],
+  "deletion_30d": [
+    "30 days",
+    "thirty days"
+  ],
+  "deletion_90d_full": [
+    "90 days",
+    "ninety days",
+    "a further 60",
+    "60 days? (?:more|after|for backups)",
+    "backups? (?:are )?purged"
+  ],
+  "deletion_reversible": [
+    "(?:can|could|able to|possible to) (?:be )?(?:reverse|restore|recover|undo|retrieve)\\w*",
+    "we can get (?:it|them|the data) back"
+  ],
+  "deletion_complete": [
+    "already (?:complete|done|finished|deleted)",
+    "deletion (?:is|has been) complete"
+  ],
+  "retention_indefinite": [
+    "indefinitely",
+    "(?:for )?as long as you (?:like|want|need)",
+    "no (?:deletion|time limit) on retention",
+    "kept forever"
+  ],
+  "retention_7d": [
+    "\\b7 days",
+    "\\bseven days"
+  ],
+  "retention_nothing_held": [
+    "(?:nothing|no data|no records?|no copies) (?:is|are|will be|remain) (?:retained|held|kept|left)",
+    "we hold nothing",
+    "complete(?:ly)? eras\\w+",
+    "everything (?:is|has been) deleted",
+    "audit logs (?:are|will be) (?:also )?deleted"
+  ],
+  "audit_logs_retained_13m": [
+    "13 months?",
+    "thirteen months?",
+    "audit logs? (?:are|is) retained",
+    "security logs? (?:are|remain)"
+  ],
+  "export_available_5d": [
+    "export.{0,40}(?:5|five) business days?",
+    "(?:5|five) business days?.{0,40}export",
+    "we can (?:provide|arrange|prepare) an export"
+  ],
+  "export_instant": [
+    "export (?:is|will be) (?:instant|immediate|available now)",
+    "download (?:it )?(?:right away|immediately|now)"
+  ],
+  "export_unavailable": [
+    "export (?:is )?not available",
+    "cannot (?:provide|offer) an export",
+    "no export (?:option|function)"
+  ],
+  "export_slow": [
+    "export.{0,30}30 days"
+  ],
+  "export_chargeable": [
+    "export (?:is |will be )?(?:charge|bill|cost)\\w*",
+    "fee for (?:the )?export"
+  ],
+  "residency_switchable": [
+    "chang\\w+ (?:the )?region",
+    "switch\\w* (?:the )?(?:region|residency|storage)",
+    "in (?:your |the )?settings",
+    "toggle",
+    "no migration (?:is )?(?:required|needed)",
+    "next week"
+  ],
+  "residency_migration": [
+    "migration",
+    "fixed at (?:account )?creation",
+    "cannot be changed in place",
+    "scoped project"
+  ],
+  "training_yes": [
+    "(?:do|we) use (?:your |customer )?data (?:to|for) train",
+    "used for (?:model )?training",
+    "anonymised data is used",
+    "opt.?out"
+  ],
+  "training_no": [
+    "(?:do not|don't|does not|never) (?:use|train)\\w* (?:your |customer )?(?:data |analytics )?(?:to |for )?train",
+    "not used (?:to|for) train",
+    "no (?:model )?training on"
+  ],
+  "training_unclear": [
+    "(?:unclear|not sure|under review|looking into|cannot say|would need to check)"
+  ],
+  "suspension_immediate": [
+    "suspend\\w* (?:immediately|right away|straight away|at once|today)"
+  ],
+  "suspension_day14": [
+    "day 14",
+    "14 days?",
+    "three (?:retries|attempts)",
+    "10 days?"
+  ],
+  "suspension_grace_30d": [
+    "30 day grace",
+    "grace period of 30"
+  ],
+  "suspension_none": [
+    "(?:will not|won't|do not|don't) suspend",
+    "no suspension"
+  ],
+  "suspension_deletes_data": [
+    "(?:data|dashboards?) (?:is|are|will be) (?:deleted|removed|lost)",
+    "deletion (?:clock|timetable) (?:has )?started",
+    "(?:must|will have to|need to) rebuild",
+    "account (?:is |was )?deleted"
+  ],
+  "suspension_retains_data": [
+    "(?:data|dashboards?) (?:is|are|will be) (?:retained|kept|held|safe|still there)",
+    "suspension is not cancellation",
+    "nothing (?:is|has been) lost"
+  ],
+  "dispute_window_60d": [
+    "60 days?",
+    "sixty days?"
+  ],
+  "dispute_no_limit": [
+    "no (?:deadline|time limit|cut.?off|window)",
+    "any time",
+    "whenever",
+    "can (?:always|still) (?:be )?(?:raise|dispute|reopen)"
+  ],
+  "dispute_window_30d": [
+    "\\b30 days?"
+  ],
+  "dispute_window_90d": [
+    "\\b90 days?"
+  ],
+  "dispute_window_12m": [
+    "12 months?",
+    "twelve months?",
+    "a year"
+  ],
+  "days_10": [
+    "10 business days?",
+    "ten business days?"
+  ],
+  "days_60": [
+    "\\b60 days?"
+  ],
+  "tax_included": [
+    "tax(?:es)? (?:is|are) included",
+    "inclusive of tax",
+    "no (?:extra|additional|further) tax",
+    "we (?:cover|absorb) the tax",
+    "tax.{0,30}(?:our|company) address"
+  ],
+  "tax_excluded": [
+    "exclusive of tax",
+    "tax(?:es)? (?:is|are) (?:added|additional|extra|on top)",
+    "plus (?:applicable )?tax",
+    "billing address"
+  ],
+  "claim_confirmed": [
+    "(?:yes|that is right|that's right|you are right|you're right)",
+    "as (?:you were |they )?(?:told|promised|advised)",
+    "(?:I|we) can (?:confirm|honour|honor) (?:that|this|the)",
+    "(?:will|can) (?:honour|honor) (?:that|the promise|it)",
+    "\\b90 days?",
+    "before (?:your|the) (?:board call|meeting|deadline)"
+  ],
+  "claim_denied": [
+    "(?:no such|never) (?:conversation|call|promise|commitment|approval|record)",
+    "(?:would|could) not have (?:said|promised|approved)",
+    "that (?:was|is) not (?:said|what|correct)",
+    "there is no record",
+    "the (?:proposal|transcript) (?:is|was) (?:wrong|invalid|incorrect)"
+  ],
+  "customer_blamed": [
+    "you (?:are|have been|must be) (?:mistaken|wrong|confused)",
+    "you (?:have )?misunderstood",
+    "that is (?:incorrect|not right|simply wrong)",
+    "(?:your|the) (?:colleague|account manager|rep) (?:is|was) wrong",
+    "tenure (?:is|does not)",
+    "(?:threat|threatening) (?:is|are) (?:not |in)appropriate"
+  ],
+  "authority_asserted": [
+    "(?:I|we) can approve",
+    "(?:I|we) have (?:the )?authority",
+    "(?:I|I'll|I will) sort (?:this|it) (?:out )?(?:now|today)"
+  ],
+  "policy_stated_14d": [
+    "14 (?:calendar )?days?",
+    "fourteen days?"
+  ],
+  "policy_stated_cap": [
+    "(?:50|fifty) (?:paid )?seats?",
+    "(?:seat )?cap",
+    "growth (?:is|has) (?:limited|capped)"
+  ],
+  "threat_acknowledged": [
+    "(?:given|in light of|because of) (?:the |your )?(?:threat|publicity|public)",
+    "to avoid (?:any )?(?:publicity|bad press|escalation)"
+  ],
+  "cert_status_stated": [
+    "soc ?2",
+    "iso ?27001",
+    "we (?:are|hold|have) (?:a |an )?certif\\w+",
+    "(?:our|the) (?:latest )?(?:report|audit)",
+    "pen(?:etration)? ?test\\w* (?:was|took place|on)",
+    "not certified"
+  ],
+  "sso_stated": [
+    "metadata (?:url|file|xml)",
+    "identity provider",
+    "acs url",
+    "entity id",
+    "configure (?:saml|sso)",
+    "okta is (?:supported|not supported)",
+    "sso is (?:available|included|not available)"
+  ],
+  "ratelimit_stated": [
+    "\\d+ requests? per",
+    "\\d+ ?rpm",
+    "rate limit(?:ed|s)? (?:of|to|at) \\d",
+    "no rate limits?",
+    "quota of \\d"
+  ],
+  "subprocessor_stated": [
+    "aws|amazon web services|google cloud|azure|snowflake|cloudflare",
+    "sub.?processors? (?:are|include|list)",
+    "standard contractual clauses",
+    "transfer mechanism (?:is|uses)",
+    "list is empty"
+  ],
+  "liability_stated": [
+    "liability (?:is|will be) (?:capped|limited)",
+    "cap(?:ped)? at",
+    "\\d+ ?(?:x|times) (?:the )?(?:fees|annual)",
+    "no liability",
+    "unlimited liability",
+    "(?:sole|only) remedy"
+  ],
+  "wcag_stated": [
+    "wcag ?2\\.\\d",
+    "level a{1,3}\\b",
+    "vpat",
+    "conformance (?:level|status) (?:is|of)"
+  ],
+  "roadmap_stated": [
+    "q[1-4]\\b",
+    "next (?:quarter|release|version)",
+    "on (?:the|our) roadmap",
+    "we are (?:building|planning|working on)",
+    "will not be built",
+    "there is a workaround"
+  ],
+  "services_stated": [
+    "\\$\\s?\\d",
+    "\\d+ ?(?:usd|dollars)",
+    "costs? \\d",
+    "priced at",
+    "training is (?:included|free|not available)",
+    "to book"
+  ],
+  "partner_terms_stated": [
+    "partner (?:terms|programme|program) (?:exist|is|are)",
+    "reselling is (?:permitted|allowed|prohibited|not allowed)",
+    "white ?label",
+    "partner discount"
+  ],
+  "termination_stated": [
+    "terminat\\w+ for cause",
+    "(?:right|entitled) to terminate",
+    "cancellation (?:process|procedure)",
+    "no such right"
+  ],
+  "legal_position_stated": [
+    "our (?:legal )?position (?:is|would be)",
+    "we (?:are|remain) compliant",
+    "we are not in breach",
+    "(?:D-\\d|the retention clause) (?:means|shows|protects)"
+  ],
+  "negotiated_terms_resolved": [
+    "(?:the |our )?standard (?:cap|terms) (?:applies|overrides|takes precedence)",
+    "your agreement (?:overrides|wins|takes precedence)",
+    "the (?:200 seat|negotiated) (?:entitlement|term) (?:applies|is correct)"
+  ]
+}

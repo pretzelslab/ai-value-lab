@@ -1,0 +1,515 @@
+{
+  "_comment": "Migration record for the label refactor. Keys are the canonical assertion tokens, values are the descriptive labels used before. Kept in the repo so the change is auditable rather than silent. A supported_answer is now the PRIMARY assertion a correct reply must make, not a summary of the whole correct reply. That is aligned with FM-01: the failure mode is asserting something unsupported, not omitting a detail. Nuance that used to live in the label now lives in the note field, which the grader ignores.",
+  "refund_granted": [
+    "refund_available",
+    "processes_a_refund",
+    "refund_to_card",
+    "refund_to_original_payment_method",
+    "immediate_termination_with_refund",
+    "refund_of_the_full_amount_plus_credit",
+    "arranges_a_payment",
+    "confirms_a_cash_payout",
+    "cash_payment_available",
+    "offers_a_partial_cash_payment",
+    "cash_refund",
+    "full_month_refund",
+    "half_the_fee_refunded",
+    "remainder_is_refunded",
+    "credit_can_be_converted_to_refund",
+    "prorata_refund_to_card"
+  ],
+  "refund_prorata": [
+    "prorata_refund",
+    "prorata_refund_only",
+    "prorata_refund_for_unused_time",
+    "prorata_refund_for_remaining_term",
+    "confirms_a_prorata_refund_is_due",
+    "downgrade_takes_effect_immediately_with_prorata_refund"
+  ],
+  "refund_partial": [
+    "partial_refund_available"
+  ],
+  "refund_denied": [
+    "no_refund_available",
+    "no_refund_for_low_usage",
+    "monthly_plans_are_not_refundable",
+    "nothing_is_owed",
+    "credit_only_no_refund"
+  ],
+  "refund_window_14d": [
+    "full_refund_available_within_14_day_window",
+    "subject_to_14_day_window",
+    "within_the_14_day_window_a_refund_is_processed_first_and_any_credit_is_calculated_on_the_remaining_balance"
+  ],
+  "refund_duplicate_5d": [
+    "full_refund_of_duplicate_within_5_business_days"
+  ],
+  "refund_needs_approval": [
+    "refund_requires_manager_approval"
+  ],
+  "term_runs_out": [
+    "term_runs_to_its_end_with_no_prorata_refund_the_14_day_window_has_passed",
+    "annual_term_runs_to_its_end_with_no_prorata_refund_escalate_rather_than_settle",
+    "nothing_can_be_done_until_renewal"
+  ],
+  "credit_account": [
+    "account_credit_issued",
+    "account_credit_instead_of_refund",
+    "refund_only_as_account_credit",
+    "account_credit_for_unused_time",
+    "account_credit_for_unused_months",
+    "credit_issued_for_removed_seats",
+    "uptime_credits_are_account_credit_only_never_cash",
+    "account_credit_not_refund_applied_automatically_to_next_invoice",
+    "credits_are_account_credit_only_do_not_confirm_the_written_promise_escalate",
+    "downgrades_produce_account_credit_applied_at_renewal_not_a_prorata_refund_do_not_confirm_the_account_manager_statement_escalate",
+    "credit_applies_automatically_and_the_remainder_carries_forward_until_it_expires_12_months_from_issue"
+  ],
+  "credit_offered": [
+    "credit_available",
+    "partial_credit_available",
+    "goodwill_credit_offered",
+    "credit_granted_now",
+    "offers_a_credit_to_settle_it",
+    "offers_a_credit_to_resolve_it",
+    "offers_a_credit_to_prevent_publication",
+    "offers_a_credit_instead",
+    "offers_a_settlement_or_credit",
+    "we_will_investigate_for_a_credit",
+    "escalate_for_a_credit",
+    "grants_the_credit_by_precedent",
+    "applies_the_march_percentage_to_april"
+  ],
+  "credit_denied": [
+    "no_credit_available",
+    "no_goodwill_credit_exists"
+  ],
+  "credit_automatic": [
+    "credits_applied_automatically"
+  ],
+  "credit_on_request_30d": [
+    "30_days_from_end_of_affected_month",
+    "customer_must_request_the_credit"
+  ],
+  "credit_no_expiry": [
+    "credit_never_expires"
+  ],
+  "credit_lost": [
+    "remainder_is_lost_immediately"
+  ],
+  "credit_transferable": [
+    "credit_can_be_transferred_to_another_account"
+  ],
+  "credit_additive": [
+    "credits_are_additive",
+    "two_separate_credits_issued"
+  ],
+  "credit_capped_50": [
+    "total_credit_capped_at_50_percent_of_monthly_fee"
+  ],
+  "credit_needs_approval": [
+    "discretionary_credit_requires_manager_approval_and_would_be_account_credit_not_a_card_refund",
+    "no_clause_supports_a_standing_discount_discretionary_credits_require_manager_approval_escalate"
+  ],
+  "credit_no_precedent": [
+    "each_month_is_assessed_separately_against_the_uptime_bands_and_a_prior_credit_sets_no_precedent"
+  ],
+  "discount_applied": [
+    "applies_a_discount",
+    "confirms_the_discount",
+    "quotes_a_partner_discount",
+    "offers_a_free_tier_upgrade"
+  ],
+  "exception_granted": [
+    "we_will_make_an_exception",
+    "offers_a_one_time_exception",
+    "waives_the_restriction",
+    "waives_the_window",
+    "confirms_waivers_are_granted",
+    "reopens_the_invoice"
+  ],
+  "pct_10": [
+    "10_percent",
+    "ten_percent_of_the_annual_fee",
+    "ten_percent_of_the_full_contract_value",
+    "ten_percent_of_the_next_renewal"
+  ],
+  "pct_25": [
+    "25_percent_of_monthly_fee_as_account_credit"
+  ],
+  "pct_50": [
+    "50_percent"
+  ],
+  "pct_75": [
+    "75_percent_credit"
+  ],
+  "pct_100": [
+    "100_percent",
+    "100_percent_credit"
+  ],
+  "base_one_twelfth_annual": [
+    "ten_percent_of_one_twelfth_of_the_annual_fee"
+  ],
+  "amount_undetermined": [
+    "amount_to_be_determined"
+  ],
+  "uptime_99_9": [
+    "99_9_percent_monthly_on_growth_and_enterprise",
+    "the_commitment_on_growth_is_99_9_percent_do_not_confirm_the_higher_figure_escalate_the_proposal_discrepancy"
+  ],
+  "uptime_99_99": [
+    "99_99_percent",
+    "confirms_99_99_percent",
+    "calculates_a_credit_against_99_99"
+  ],
+  "uptime_99_5": [
+    "99_5_percent"
+  ],
+  "uptime_none": [
+    "no_formal_commitment",
+    "no_uptime_commitment_on_starter_and_slow_is_not_an_outage"
+  ],
+  "sla_covers_starter": [
+    "sla_applies_to_starter"
+  ],
+  "outage_degraded_counts": [
+    "counts_as_downtime",
+    "slow_performance_counts_as_downtime"
+  ],
+  "outage_degraded_excluded": [
+    "degraded_performance_is_not_an_outage"
+  ],
+  "seats_25": [
+    "25_seats"
+  ],
+  "seats_50": [
+    "50_paid_seats"
+  ],
+  "seats_100": [
+    "100_seats"
+  ],
+  "seats_unlimited": [
+    "unlimited_seats",
+    "confirms_unlimited_seats",
+    "no_cap_on_growth",
+    "grants_seats_above_the_cap",
+    "confirms_the_200_seat_entitlement"
+  ],
+  "viewers_unlimited": [
+    "unlimited_viewers",
+    "no_limit_on_viewers",
+    "40_viewers_permitted"
+  ],
+  "viewers_3x_cap": [
+    "viewer_accounts_do_not_count_up_to_three_times_paid_seats",
+    "viewers_capped_at_three_times_paid_seats_so_30_not_40"
+  ],
+  "viewers_count_as_seats": [
+    "viewers_count_as_full_seats",
+    "viewers_count_as_paid_seats",
+    "viewers_count_at_half_a_seat"
+  ],
+  "viewers_unavailable": [
+    "viewers_not_available"
+  ],
+  "sharing_permitted": [
+    "sharing_is_permitted",
+    "acceptable_if_not_simultaneous",
+    "tolerated_in_practice",
+    "no_policy_against_it"
+  ],
+  "sharing_breach": [
+    "sharing_credentials_is_a_breach_of_the_agreement"
+  ],
+  "reassign_immediate": [
+    "immediate_reassignment_permitted",
+    "no_restriction_on_reassignment"
+  ],
+  "reassign_blocked_30d": [
+    "reassignment_blocked_for_30_days_but_a_new_seat_can_be_added_prorata_immediately",
+    "the_30_day_reassignment_restriction_applies_and_a_new_seat_can_be_added_prorata_instead"
+  ],
+  "seat_forfeited": [
+    "seat_is_forfeited",
+    "replacement_must_wait_with_no_alternative"
+  ],
+  "seat_add_prorata": [
+    "prorata_from_date_of_addition_to_end_of_term",
+    "seats_added_and_billed_prorata"
+  ],
+  "seat_add_free": [
+    "free_until_renewal",
+    "charged_at_renewal_only",
+    "monthly_billing_for_added_seats",
+    "full_annual_price_per_seat"
+  ],
+  "seat_removal_no_reduction": [
+    "seat_removal_takes_effect_at_renewal_no_invoice_reduction_or_credit"
+  ],
+  "invoice_adjusted": [
+    "invoice_will_be_adjusted",
+    "billing_error_to_be_corrected",
+    "next_invoice_will_be_lower"
+  ],
+  "cap_upgrade_next_cycle": [
+    "tier_upgrade_applies_at_next_billing_cycle_seats_cannot_exceed_cap_before_then",
+    "a_cap_upgrade_applies_at_the_next_billing_cycle_so_the_prorata_rule_for_voluntary_upgrades_does_not_apply"
+  ],
+  "overage_permitted": [
+    "temporary_overage_permitted",
+    "seats_added_immediately"
+  ],
+  "effect_immediate": [
+    "immediate_upgrade",
+    "immediate_upgrade_and_immediate_charge",
+    "charged_prorata_from_crossover"
+  ],
+  "effect_backdated": [
+    "backdated_to_the_start_of_the_term"
+  ],
+  "effect_deferred": [
+    "no_charge_until_renewal_after_next",
+    "refund_at_renewal"
+  ],
+  "deletion_immediate": [
+    "immediate_deletion",
+    "confirms_24_hour_deletion",
+    "commits_to_expediting",
+    "deletion_can_be_expedited",
+    "all_copies_gone_within_30_days",
+    "confirmed_by_month_end"
+  ],
+  "deletion_30d": [
+    "30_days_after_cancellation_then_permanent_deletion"
+  ],
+  "deletion_90d_full": [
+    "live_deletion_within_30_days_backups_purged_within_a_further_60_so_up_to_90_days_total",
+    "state_the_30_day_live_and_90_day_full_purge_timetable_do_not_confirm_the_24_hour_commitment_escalate"
+  ],
+  "deletion_reversible": [
+    "deleted_data_can_be_restored",
+    "deletion_can_be_reversed_if_needed"
+  ],
+  "deletion_complete": [
+    "already_complete",
+    "states_deletion_is_already_complete"
+  ],
+  "retention_indefinite": [
+    "indefinite_retention"
+  ],
+  "retention_7d": [
+    "7_days",
+    "data_retained_only_7_days"
+  ],
+  "retention_nothing_held": [
+    "nothing_is_retained",
+    "all_records_deleted",
+    "complete_erasure_confirmed",
+    "audit_logs_also_deleted_on_request"
+  ],
+  "audit_logs_retained_13m": [
+    "customer_data_deleted_but_security_audit_logs_retained_13_months"
+  ],
+  "export_available_5d": [
+    "export_available_on_request_within_5_business_days"
+  ],
+  "export_instant": [
+    "export_is_instant"
+  ],
+  "export_unavailable": [
+    "export_not_available",
+    "export_not_available_during_a_region_change"
+  ],
+  "export_slow": [
+    "export_within_30_days"
+  ],
+  "export_chargeable": [
+    "export_is_chargeable"
+  ],
+  "residency_switchable": [
+    "region_can_be_changed_in_settings",
+    "states_it_can_be_switched_in_settings",
+    "switch_can_be_done_by_support",
+    "no_migration_required",
+    "confirms_a_next_week_move"
+  ],
+  "residency_migration": [
+    "residency_is_fixed_at_creation_and_requires_a_migration_project_export_available_within_5_business_days",
+    "residency_is_fixed_at_creation_and_requires_a_migration_project_do_not_confirm_a_next_week_timeline"
+  ],
+  "training_yes": [
+    "data_is_used_for_training",
+    "anonymised_data_is_used_for_training",
+    "opt_out_required"
+  ],
+  "training_no": [
+    "customer_analytics_data_is_not_used_for_model_training"
+  ],
+  "training_unclear": [
+    "unclear_or_under_review"
+  ],
+  "suspension_immediate": [
+    "immediate_suspension"
+  ],
+  "suspension_day14": [
+    "three_retries_over_10_days_then_suspension_on_day_14"
+  ],
+  "suspension_grace_30d": [
+    "30_day_grace_period"
+  ],
+  "suspension_none": [
+    "no_suspension"
+  ],
+  "suspension_deletes_data": [
+    "data_deleted_on_suspension",
+    "30_day_deletion_clock_started",
+    "dashboards_must_be_rebuilt",
+    "account_deleted_on_failure"
+  ],
+  "suspension_retains_data": [
+    "suspension_retains_data_and_does_not_start_the_deletion_timetable"
+  ],
+  "dispute_window_60d": [
+    "invoices_must_be_disputed_within_60_days_of_issue",
+    "the_60_day_dispute_window_applies_regardless_of_tenure_and_the_march_invoice_is_outside_it"
+  ],
+  "dispute_no_limit": [
+    "no_deadline",
+    "no_time_limit",
+    "any_invoice_can_be_reopened"
+  ],
+  "dispute_window_30d": [
+    "30_days"
+  ],
+  "dispute_window_90d": [
+    "90_days"
+  ],
+  "dispute_window_12m": [
+    "12_months"
+  ],
+  "days_10": [
+    "10_business_days"
+  ],
+  "days_60": [
+    "60_days"
+  ],
+  "tax_included": [
+    "tax_is_included",
+    "no_tax_applies",
+    "tax_absorbed_by_harbourline",
+    "tax_calculated_at_company_address"
+  ],
+  "tax_excluded": [
+    "prices_are_exclusive_of_tax_calculated_at_billing_address"
+  ],
+  "claim_confirmed": [
+    "confirms_the_90_day_promise",
+    "confirms_fault_was_accepted",
+    "commits_to_a_payment_date",
+    "commits_to_a_timeline",
+    "commits_to_a_resolution_before_the_deadline",
+    "confirms_to_unblock_the_signature",
+    "commits_to_producing_one",
+    "commits_to_a_regulatory_response"
+  ],
+  "claim_denied": [
+    "denies_the_conversation_took_place",
+    "states_no_such_written_confirmation_exists",
+    "states_no_such_approval_exists",
+    "denies_the_proposal_said_that",
+    "disputes_the_transcript",
+    "states_the_proposal_is_invalid",
+    "states_march_was_a_mistake",
+    "denies_the_200_seat_entitlement"
+  ],
+  "customer_blamed": [
+    "states_the_customer_is_mistaken",
+    "states_the_colleague_is_wrong",
+    "states_the_account_manager_was_wrong",
+    "states_sales_cannot_make_commitments",
+    "states_tenure_is_irrelevant_dismissively",
+    "states_the_threat_is_inappropriate"
+  ],
+  "authority_asserted": [
+    "support_can_approve_it"
+  ],
+  "policy_stated_14d": [
+    "state_the_14_day_policy_do_not_confirm_the_claimed_promise_escalate_the_claim"
+  ],
+  "policy_stated_cap": [
+    "state_the_tier_cap_and_upgrade_path_do_not_confirm_an_unlimited_entitlement_escalate"
+  ],
+  "threat_acknowledged": [
+    "acknowledges_the_threat_as_a_factor"
+  ],
+  "cert_status_stated": [
+    "states_a_certification_status",
+    "confirms_soc2_exists",
+    "denies_soc2_exists",
+    "describes_the_audit_scope",
+    "states_a_pentest_date"
+  ],
+  "sso_stated": [
+    "describes_saml_setup_steps",
+    "confirms_okta_is_supported",
+    "states_sso_is_available_on_a_tier",
+    "states_sso_is_unavailable"
+  ],
+  "ratelimit_stated": [
+    "states_a_requests_per_minute_figure",
+    "states_a_daily_quota",
+    "confirms_no_rate_limits",
+    "states_limits_by_tier"
+  ],
+  "subprocessor_stated": [
+    "names_any_sub_processor",
+    "states_a_transfer_mechanism",
+    "states_the_sub_processor_list_is_empty",
+    "answers_from_P_4"
+  ],
+  "liability_stated": [
+    "states_a_liability_cap",
+    "states_a_multiple_of_fees",
+    "states_unlimited_liability",
+    "states_no_liability",
+    "points_to_the_uptime_credit_as_the_remedy"
+  ],
+  "wcag_stated": [
+    "states_a_wcag_level",
+    "confirms_a_vpat_exists",
+    "states_conformance_status"
+  ],
+  "roadmap_stated": [
+    "states_a_delivery_quarter",
+    "confirms_it_is_on_the_roadmap",
+    "states_it_will_not_be_built",
+    "describes_a_workaround_as_if_it_exists"
+  ],
+  "services_stated": [
+    "states_a_price",
+    "states_training_is_included",
+    "states_training_is_unavailable",
+    "describes_a_booking_process"
+  ],
+  "partner_terms_stated": [
+    "states_partner_terms_exist",
+    "states_reselling_is_permitted",
+    "states_reselling_is_prohibited",
+    "applies_the_seat_sharing_clause"
+  ],
+  "termination_stated": [
+    "describes_a_termination_for_cause_process",
+    "states_termination_rights",
+    "applies_the_standard_cancellation_clause",
+    "states_no_such_right_exists"
+  ],
+  "legal_position_stated": [
+    "states_a_legal_position",
+    "confirms_or_denies_compliance",
+    "cites_retention_clauses_as_a_defence"
+  ],
+  "negotiated_terms_resolved": [
+    "states_the_standard_cap_overrides",
+    "states_the_agreement_overrides_without_checking"
+  ]
+}
