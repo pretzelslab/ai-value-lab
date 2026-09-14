@@ -1,0 +1,62 @@
+AI Value Lab
+NOTICE
+
+WHAT IS PUBLISHED HERE
+
+This repository contains the economics engine, the assessment methodology,
+the canonical model, the preregistered protocol for the first measured
+evaluation, and one worked example built on a synthetic policy pack.
+
+That is deliberate. The method is publishable and should be readable, argued
+with, and corrected. A method nobody can inspect is not a method.
+
+WHAT IS DELIBERATELY NOT PUBLISHED HERE
+
+The following are the substantive assets of this work and are held
+separately:
+
+  - The full evaluation case sets, with ground truth answer keys, clause
+    mappings and prohibited assertion lists, beyond the sample committed for
+    the first slice.
+  - The vertical profile packs: context specific failure modes, severity
+    classes, rubric anchors and assumption ranges for each business function.
+  - The rubric library used to score likelihood, impact and evidence
+    sufficiency.
+  - Client engagement material and any assessment produced for a third party.
+
+Their absence is not an oversight. Anyone can rewrite the application code in
+a weekend. Authoring sixty defensible support cases with a ground truth
+answer key takes domain judgement and several days, and that is where the
+value sits.
+
+SYNTHETIC DATA ONLY
+
+No real customer, employee or client data appears anywhere in this
+repository. The policy pack used in the evaluation describes a fictitious
+company and is written specifically so that ground truth is knowable and no
+real organisation's commitments are published. Every evidence record states
+whether its underlying data is synthetic.
+
+NO CUSTOMER DATA, NO TELEMETRY
+
+This toolkit is an assessment instrument, not a system of record. It runs
+locally. It collects no telemetry, transmits no usage data, and requires no
+account. It is not designed to store customer data and should not be used to
+do so.
+
+THIRD PARTY COMPONENTS
+
+Dependencies retain their own licences, which are recorded in uv.lock and
+pyproject.toml. Nothing in this NOTICE alters the terms under which those
+components are provided.
+
+TRADEMARKS
+
+"AI Value Lab" is used as the name of this work. No licence to use the name
+is granted by the LICENSE file. Nothing here grants rights to any third party
+name or mark referenced in the documentation.
+
+CONTACT
+
+Questions about scope, permitted use, or collaboration should be raised
+through https://github.com/pretzelslab/ai-value-lab

@@ -1,0 +1,77 @@
+AI Value Lab
+Copyright (c) 2026 Preethi Raghuveeran. All rights reserved.
+
+SOURCE AVAILABLE LICENCE
+
+This software and its accompanying documentation, methodology, rubrics,
+evaluation designs, case sets and data (together, "the Work") are made
+publicly readable. They are not open source. The Work is not licensed under
+any OSI approved licence, and no such licence should be inferred from its
+public visibility.
+
+1. PERMITTED USE
+
+   You may, at no charge:
+
+   a. View, read, download and study the Work.
+   b. Run the Work locally for personal evaluation, learning or academic
+      research that is not conducted for or funded by a commercial entity.
+   c. Quote limited portions in academic work, journalism, commentary or
+      teaching, with attribution as set out in section 4.
+
+2. PROHIBITED WITHOUT WRITTEN PERMISSION
+
+   You may not:
+
+   a. Use the Work, in whole or in part, in any commercial product,
+      commercial service, consulting engagement, or internal business
+      process of a commercial entity.
+   b. Distribute, sublicense, sell, or offer the Work or any derivative of
+      it, whether modified or unmodified.
+   c. Use the methodology, metrics, rubrics, failure mode taxonomy or
+      evaluation design described here as the basis of a competing product,
+      framework or commercial offering.
+   d. Present the Work, its methodology or its outputs as your own, or
+      remove or obscure attribution.
+   e. Train a machine learning model on the Work for the purpose of
+      reproducing its methodology as a product feature.
+
+3. REQUESTING PERMISSION
+
+   Commercial use may be granted. Ask. Contact the copyright holder through
+   the repository at https://github.com/pretzelslab/ai-value-lab and describe
+   the intended use. Permission, where granted, will be in writing and
+   specific in scope.
+
+4. ATTRIBUTION
+
+   Any permitted reference to the Work must credit:
+
+     Raghuveeran, P. (2026). AI Value Lab: evidence driven AI use case
+     assessment. https://github.com/pretzelslab/ai-value-lab
+
+   See CITATION.cff for machine readable metadata.
+
+5. NO WARRANTY
+
+   THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+   THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+   OR IN CONNECTION WITH THE WORK OR THE USE OR OTHER DEALINGS IN THE WORK.
+
+6. NOT PROFESSIONAL ADVICE
+
+   The Work produces assessments and recommendations concerning AI
+   deployment. It does not constitute legal, regulatory, financial or
+   professional advice. Outputs depend entirely on user supplied inputs and
+   assumptions. Responsibility for any deployment decision rests with the
+   organisation making it.
+
+7. SEVERABILITY AND GOVERNING LAW
+
+   If any provision of this licence is held unenforceable, the remaining
+   provisions continue in full force. This licence is governed by the laws
+   of the Province of Ontario, Canada, without regard to conflict of law
+   principles.

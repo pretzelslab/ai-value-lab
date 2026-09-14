@@ -1,0 +1,30 @@
+# Normalise line endings so a Mac and a Windows checkout produce identical diffs.
+# Without this, every file touched on Windows shows as fully rewritten.
+* text=auto eol=lf
+
+# Windows only scripts keep CRLF.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary, never normalise or diff as text.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.pdf  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.xlsx binary
+*.docx binary
+*.pptx binary
+
+# Lockfile: keep it text, but do not clutter review diffs.
+uv.lock linguist-generated=true
+
+# Evidence and case data are line oriented and must diff cleanly.
+*.jsonl text eol=lf
+*.csv   text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf

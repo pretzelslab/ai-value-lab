@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "AI Value Lab: evidence driven AI use case assessment"
+message: "If you reference this methodology, its metrics, or its outputs, please cite it as below."
+type: software
+authors:
+  - family-names: "Raghuveeran"
+    given-names: "Preethi"
+repository-code: "https://github.com/pretzelslab/ai-value-lab"
+abstract: >-
+  An assessment toolkit that connects the economic case for an AI use case to
+  measured evidence about how the system behaves. It converts evaluation
+  evidence into a measured control effectiveness, carries the resulting
+  residual risk into the business case, and reports what each point of risk
+  removed costs. Outputs a routing rule through a workflow rather than a
+  single verdict on it, with a provenance tag and an interval on every
+  material number.
+keywords:
+  - AI governance
+  - responsible AI
+  - AI assurance
+  - control effectiveness
+  - evaluation design
+  - residual risk
+  - AI business case
+  - decision traceability
+license: LicenseRef-SourceAvailable
+license-url: "https://github.com/pretzelslab/ai-value-lab/blob/main/LICENSE"
+version: "0.1.0"
+date-released: "2026-09-14"
