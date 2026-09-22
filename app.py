@@ -36,6 +36,12 @@ from ai_value_lab.presentation import (
     risk_inference,
     scope_actions,
 )
+from ai_value_lab.progression import (
+    POSTURE_GUIDE,
+    assessment_path,
+    illustrative_progression,
+    progression_readout,
+)
 
 HELP_TEXT = {
     "monthly_cases": (
@@ -928,6 +934,22 @@ with summary_slot:
             case_category, monthly_value_after_assurance, ai_inputs, exposures,
             decision.confidence.level, decision.confidence.maturity, decision.posture,
         ))
+        path = assessment_path(decision, monthly_value_after_assurance)
+        st.write(progression_readout(path))
+        st.subheader("Assessment Path")
+        st.markdown(f"**Current posture:** {path.current_posture} · **Signal:** {path.signal}")
+        st.markdown(f"**Next stage target (conditional):** {path.target}")
+        st.caption("AI-assisted share does not equal autonomous share. HOLD FOR EVIDENCE "
+                   "means broad deployment of the configured scope is not yet supported by "
+                   "evidence; it does not permanently reject AI across the broader workflow.")
+        with st.expander("What moves this forward?"):
+            st.markdown("**Already satisfied**")
+            show_lines(path.satisfied or ("No supported milestones recorded yet.",))
+            st.markdown("**Still needed**")
+            show_lines(path.needed or ("No open framework gaps; retain safeguards and reassess after changes.",))
+            st.markdown(f"**Next stage target:** {path.target}")
+            st.caption("Observed support reflects supplied reviewer declarations; artifacts are not "
+                       "automatically verified. A supported review may still identify High residual risk.")
     else:
         st.warning("Assessment incomplete: correct invalid declarations below. "
                    "No previous decision signal is retained.")
@@ -940,3 +962,13 @@ with summary_slot:
     st.caption(" · ".join(f"{label}: {value}" for label, value in configuration.items()))
     st.caption("Case category changes risk context, not economics. "
                "Economic figures use the workflow assumptions currently configured.")
+    with st.expander("Posture progression explained"):
+        show_lines(POSTURE_GUIDE)
+    with st.expander("See an illustrative progression"):
+        st.warning("Synthetic illustration · Not the current assessment · Not observed HR evidence")
+        for stage, description in illustrative_progression():
+            st.markdown(f"**{stage}**")
+            st.write(description)
+        st.caption(POSTURE_GUIDE[4])
+        st.caption("These hypothetical stages do not populate evidence, change inputs or promote "
+                   "the live assessment. Actual posture always comes from the existing framework.")

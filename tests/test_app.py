@@ -59,6 +59,17 @@ def test_default_payroll_complete_journey(app):
     assert "#value" in markdown(app) and "#reality-risk" in markdown(app)
 
 
+def test_progression_illustration_is_separate_from_live_assessment(app):
+    illustration = next(e for e in app.expander if e.label == "See an illustrative progression")
+    assert "Not the current assessment" in illustration.warning[0].value
+    assert "Not observed HR evidence" in illustration.warning[0].value
+    assert "Stage 3 · GO WITH CONTROLS" in " ".join(m.value for m in illustration.markdown)
+    assert "**Current posture:** Insufficient evidence" in markdown(app)
+    assert metrics(app)["Assessment confidence"] == "Low"
+    assert set(app.dataframe[1].value["Evidence"]) == {"Missing"}
+    assert any("What moves this forward?" == e.label for e in app.expander)
+
+
 @pytest.mark.parametrize("category", ["General HR policy", "Benefits", "Employee data"])
 def test_category_switch_preserves_economics_and_exact_profiles(app, category):
     app.sidebar.selectbox[0].select(category).run()
