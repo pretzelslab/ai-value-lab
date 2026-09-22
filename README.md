@@ -11,9 +11,9 @@ summarizes and drafts guidance; it does not autonomously change payroll or emplo
 records, approve benefits, or make employment decisions.
 
 **Status:** portfolio V1 framework prototype; package version remains `0.1.0`.
-The economics and HR risk view run in Streamlit. Reusable evidence, control,
-residual-review and deployment-posture modules are implemented and tested separately;
-the three-step UI integration is specified, not implemented. No validated HR
+The three-step Streamlit journey presents economics, HR risk, evidence, controls,
+residual review and deployment posture using reusable tested modules.
+Payroll Inquiry is the default illustrative example. No validated HR
 performance or measured HR control effectiveness is claimed.
 
 **Terms:** source available, not open source. See [LICENSE](LICENSE), [NOTICE](NOTICE)
@@ -39,7 +39,7 @@ privacy, compliance, and operational exposure.
 | --- | --- | --- |
 | Economics | Deterministic baseline, AI workflow, rework, review, service costs, savings and payback | Inputs are assumptions until measured; formulas unchanged |
 | Assurance economics | Avoided rework cost minus control cost; remaining errors and rework cost | User-supplied effectiveness, not measured HR effectiveness; does not monetize all risk dimensions |
-| Streamlit | Input controls, economic comparison, HR risk table, assurance results and explanations | Existing layout; new framework rules are not yet wired into the UI |
+| Streamlit | Three numbered sections with jump links, economics, evidence declarations, control/residual review and explanations | Evidence is user-declared, not independently verified; Payroll control proposals do not transfer to other categories |
 | Risk profiles | Four HR categories × Reliability, Privacy, Compliance, Operational Impact | Synthetic prototype likelihood/impact assumptions; exposure derived from them |
 | Evidence and confidence | Six-factor deterministic Low/Medium/High confidence, reasons, maturity and gaps | Supplied evidence records are not independently verified; no confidence percentages |
 | Controls and residual review | Four illustrative Payroll controls and evidence-gated residual assessment | Proposed controls earn no reduction credit; implementation is a declaration, not enforced by this software |
@@ -97,8 +97,8 @@ conditional result, evidence gap and the resulting Insufficient evidence posture
 - [Risk model](docs/RISK_MODEL.md): dimensions, matrix, calibration and limitations.
 - [Assessment method](docs/ASSESSMENT_METHOD.md): evidence, confidence, controls,
   residual review and ordered decision rules.
-- [Three-step UI specification](docs/UI_WALKTHROUGH.md): planned user journey;
-  does not describe the currently implemented Streamlit layout.
+- [Three-step UI walkthrough](docs/UI_WALKTHROUGH.md): implemented journey,
+  validation scope and remaining manual browser checks.
 - [Portfolio positioning](docs/PORTFOLIO_POSITIONING.md): copy for later PreetiBuilds
   use. PreetiBuilds remains the independent canonical presentation layer.
 - Existing `docs/decision-brief-support.html`, `docs/tradeoff-machine.html`,
@@ -185,12 +185,12 @@ control proposal do not become observations through calculation.
 ## Maturity and future scope
 
 V1 is a coherent **framework prototype**, not a validated HR decision service.
-The next implementation step is the specified three-step Streamlit walkthrough,
-using the tested modules while preserving economics and default risk profiles.
+The three-step Streamlit walkthrough now uses the tested modules while preserving
+economics and default risk profiles. Next, manually review the browser workflow,
+narrow-screen layout and methodological language before capturing portfolio assets.
 Observed HR evaluations, reviewed control effectiveness, calibrated thresholds,
 quantitative uncertainty, document export and portfolio promotion remain future
-work. A working library is not an integrated UI, and an integrated UI would not
-by itself establish real-world validity.
+work. An integrated UI does not by itself establish real-world validity.
 
 No model APIs, databases, authentication, RAG, agents or production monitoring are
 introduced by this pass. The project is not an enterprise inventory, GRC replacement,
@@ -238,6 +238,6 @@ This toolkit produces assessments and recommendations about AI deployment. It do
 
 ## Project status
 
-Package version: `0.1.0`. Portfolio V1 framework prototype; Streamlit integration
-of the new assessment chain remains specified for a later pass. No production
+Package version: `0.1.0`. Portfolio V1 framework prototype with the three-step
+assessment chain integrated into Streamlit. No production
 readiness or validated HR deployment recommendation is claimed.

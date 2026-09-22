@@ -40,11 +40,11 @@ return a posture with reasons rather than a single combined score.
 - Reusable qualitative evidence-maturity and confidence classification.
 - Four illustrative Payroll controls and evidence-gated residual reassessment.
 - Five deterministic advisory deployment postures with explanations and gaps.
-- A Payroll worked assessment in structured Markdown, tests, and a future
-  three-step UI specification.
+- A Payroll worked assessment in structured Markdown, tests, and a three-step
+  Streamlit walkthrough.
 
-The new assessment modules run independently of Streamlit; their UI integration
-is pending. Existing separate customer-support evaluation tooling is research
+The assessment modules run independently of Streamlit and also power its three-step
+interface. Existing separate customer-support evaluation tooling is research
 infrastructure, not validated HR evidence.
 
 ## Current limitations
@@ -65,8 +65,8 @@ risk and confidence separate avoids treating uncertainty as reassurance.
 ## Prototype status language
 
 “Portfolio V1 framework prototype. Deterministic economics and advisory assessment
-rules, illustrated with synthetic HR assumptions. New framework logic is tested
-separately from the current Streamlit interface. Not a validated HR decision
+rules, illustrated with synthetic HR assumptions. Framework unit tests and headless
+Streamlit tests cover the assessment journey. Not a validated HR decision
 service or production deployment.”
 
 ## Suggested portfolio metadata and assets

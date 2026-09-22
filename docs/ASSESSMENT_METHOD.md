@@ -1,7 +1,7 @@
 # V1 evidence, assurance, and decision rules
 
 **Status: provisional, deterministic assessment conventions for human review.**
-These modules are reusable Python logic, not UI features, operational controls,
+The Streamlit UI calls these reusable Python modules; they are not operational controls,
 legal conclusions, or authorization to deploy. No percentages describe confidence.
 
 ## Scope and provenance

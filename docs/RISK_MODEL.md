@@ -14,7 +14,7 @@ Inherent exposure is derived from those assumptions and is not new evidence.
    Compliance, and Operational Impact separately from economic value.
 3. **Assurance and Decision:** connect evidence, controls, residual risk,
    confidence, and a deployment recommendation. Dedicated V1 modules implement
-   transparent advisory rules; they are not yet connected to the Streamlit UI.
+   transparent advisory rules, now connected to the three-step Streamlit UI.
 
 The full reasoning chain is Value → Reality → Risk → Evidence → Controls →
 Residual Risk → Confidence → Decision. See [assessment rules](ASSESSMENT_METHOD.md)
@@ -101,8 +101,8 @@ at 5 conceptually, but its first reachable score is 6. Tests exercise the actual
 This is an ordinal screening convention, not expected financial loss or a
 statistically calibrated risk quantity. Inherent means before crediting the
 assurance control being assessed; the prototype does not explicitly represent
-all existing workflow controls. The unchanged UI displays inherent exposure;
-the separate V1 control module supports an evidence-gated residual review.
+all existing workflow controls. Step 2 displays the unchanged inherent exposure;
+Step 3 uses the V1 control module for evidence-gated residual review.
 Invalid likelihood or impact strings raise `ValueError` when
 exposure is accessed, not when the dataclass is constructed. Labels are
 case-sensitive and must be exactly Low, Medium, or High.

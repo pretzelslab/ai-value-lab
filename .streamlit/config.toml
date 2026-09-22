@@ -1,0 +1,9 @@
+# PreetiBuilds light palette: purple primary, cool neutral canvas, restrained cards.
+# Keep Streamlit's native font fallback; do not fetch remote portfolio fonts.
+[theme]
+base = "light"
+primaryColor = "#524785"
+backgroundColor = "#F6F7F9"
+secondaryBackgroundColor = "#E8EBEF"
+textColor = "#131820"
+font = "sans serif"
